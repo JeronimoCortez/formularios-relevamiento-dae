@@ -23,7 +23,7 @@ export function SituacionesRiesgo() {
     { name: "situacionesRiesgo.retosVirales", label: "Retos virales peligrosos: cantidad de desafios de redes sociales que pongan en riesgo la integridad." },
     { name: "situacionesRiesgo.amenazas", label: "Amenazas de intimidación pública: Cantidad de casos de falsa alarma o situaciones de alteración de la convivencia escolar." },
     { name: "situacionesRiesgo.conflictosPares", label: "Conflictos graves entre pares: Cantidad de casos de acoso entre pares o uso indebido de grupos de WhatsApp/redes." },
-    { name: "situacionesRiesgo.conflictividadDigital", label: "Conflictividad en entornos digitales" },
+    { name: "situacionesRiesgo.conflictividadDigital", label: "Conflictividad en entornos digitales: Cantidad de casos de acoso entre pares o uso indebido de grupos de WhatsApp/redes." },
     { name: "situacionesRiesgo.otrosRiesgos", label: "Otros riesgos institucionales: Cantidad de situaciones no contempladas en las anteriores que alteren la paz institucional." },
   ];
 
@@ -36,28 +36,30 @@ export function SituacionesRiesgo() {
         Ingrese la cantidad de casos detectados para cada categoría (0 si no hubo casos).
       </p>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-4 items-start">
         {campos.map(({ name, label }) => {
           const fieldKey = name.split(".")[1];
           const fieldError = srErrors?.[fieldKey]?.message;
           return (
-            <div key={name}>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+            <div key={name} className="flex flex-col justify-between h-full">
+              <label className="block text-sm font-medium text-gray-700 mb-2 leading-snug">
                 {label}
               </label>
-              <input
-                type="number"
-                min="0"
-                {...register(name)}
-                className={`w-full border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 ${
-                  fieldError
-                    ? "border-red-400 focus:ring-red-200"
-                    : "border-gray-300 focus:ring-amber-200"
-                }`}
-              />
-              {fieldError && (
-                <p className="text-xs text-red-600 mt-1">{fieldError}</p>
-              )}
+              <div>
+                <input
+                  type="number"
+                  min="0"
+                  {...register(name)}
+                  className={`w-full border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 ${
+                    fieldError
+                      ? "border-red-400 focus:ring-red-200"
+                      : "border-gray-300 focus:ring-amber-200"
+                  }`}
+                />
+                {fieldError && (
+                  <p className="text-xs text-red-600 mt-1">{fieldError}</p>
+                )}
+              </div>
             </div>
           );
         })}
