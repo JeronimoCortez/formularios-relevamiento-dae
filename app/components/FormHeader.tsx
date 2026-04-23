@@ -54,6 +54,12 @@ export function FormHeader({ nivel }: FormHeaderProps) {
           </div>
         </div>
       </div>
+      <a href="/" className="inline-flex items-center justify-center gap-2 text-white-300 hover:text-blue-200 transition-colors mt-3">
+        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+        </svg>
+        Volver al inicio
+      </a>
     </div>
   );
 }
