@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Relevamiento Provincial | Ministerio de Educación Mendoza",
+  title: "Relevamiento Provincial | Dirección General de Escuelas",
   description:
     "Operativo Territorial de Responsabilidad Parental, Acuerdos de Convivencia y Seguridad Integral",
 };

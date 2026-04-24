@@ -30,6 +30,7 @@ export interface FormDataPrimaria {
   tipoGestion: TipoGestion;
   sedeSupervisión: string;
   departamento: string;
+  nombreEstablecimiento: string;
   escuela: string;
   correoElectronico: string;
   grados: Record<string, GradoData>; // "1°", "2°", ..., "7°"
@@ -41,6 +42,7 @@ export interface FormDataSecundaria {
   tipoGestion: TipoGestion;
   sedeSupervisión: string;
   departamento: string;
+  nombreEstablecimiento: string;
   escuela: string;
   grados: Record<string, GradoData>; // "1°", ..., "6°"
   situacionesRiesgo: SituacionesRiesgo;
@@ -51,6 +53,7 @@ export interface FormDataAdultos {
   tipoGestion: TipoGestion;
   sedeSupervisión: string;
   departamento: string;
+  nombreEstablecimiento: string;
   escuela: string;
   ciclos: Record<string, GradoData>; // "Ciclo Básico", "Ciclo Orientado"
   situacionesRiesgo: SituacionesRiesgo;

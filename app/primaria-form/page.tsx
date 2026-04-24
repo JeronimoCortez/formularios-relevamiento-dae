@@ -8,7 +8,6 @@ import { FormHeader } from "../components/FormHeader";
 import { CamposGenerales } from "../components/CamposGeneralesPrimaria";
 import { GradoRow } from "../components/GradoRow";
 import { SituacionesRiesgo } from "../components/SituacionesRiesgo";
-import { VulneracionDerechos } from "../components/VulneracionDerechos";
 import { SubmitButton } from "../components/SubmitButton";
 import { SuccessMessage } from "../components/SuccessMessage";
 
@@ -76,14 +75,7 @@ export default function FormularioPrimaria() {
 
             {/* Relevamiento por año */}
             <section className="bg-white border border-gray-200 rounded-xl p-6 mb-6">
-              <div className="flex items-center justify-between mb-2">
-                <h3 className="text-base font-semibold text-gray-800">
-                  Relevamiento por Grado
-                </h3>
-                <span className="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full font-medium">
-                  Verificar sumatorias
-                </span>
-              </div>
+              
               <p className="text-xs text-gray-500 mb-5">
                 Para cada grado: notificadas + acta supletoria + ausentes debe ser igual a la matrícula total.
               </p>
@@ -99,11 +91,6 @@ export default function FormularioPrimaria() {
             {/* Situaciones de riesgo */}
             <div className="mb-6">
               <SituacionesRiesgo />
-            </div>
-
-            {/* Vulneración de derechos */}
-            <div className="mb-6">
-              <VulneracionDerechos />
             </div>
 
             {/* Error de servidor */}

@@ -89,9 +89,13 @@ const vulneracionSchema = z
 // ─── Base campos generales ────────────────────────────────────────────────────
 
 const camposGeneralesSchema = z.object({
-tipoGestion: z.enum(["Estatal", "Privada"]),
-sedeSupervisión: z.string().min(1, "Debe seleccionar la sede de supervisión"),
-departamento: z.enum(DEPARTAMENTOS_MENDOZA),
+  tipoGestion: z.enum(["Estatal", "Privada"]),
+  sedeSupervisión: z.string().min(1, "Debe seleccionar la sede de supervisión"),
+  departamento: z.enum(DEPARTAMENTOS_MENDOZA),
+  nombreEstablecimiento: z
+    .string()
+    .trim()
+    .min(1, "Nombre del establecimiento requerido"),
   escuela: z
     .string()
     .min(2, "Numero de escuela requerido")
@@ -152,6 +156,7 @@ const defaultBase = {
   tipoGestion: undefined as unknown as "Estatal" | "Privada",
   sedeSupervisión: "",
   departamento: undefined as unknown as string,
+  nombreEstablecimiento: "",
   escuela: "",
   situacionesRiesgo: defaultSituaciones,
   vulneracion: defaultVulneracion,
@@ -162,6 +167,7 @@ export const defaultValuesPrimaria: FormValuesPrimaria = {
   correoElectronico: "",
   sedeSupervisión: "",
   departamento: DEPARTAMENTOS_MENDOZA[0],
+  nombreEstablecimiento: "",
   escuela: "",
   situacionesRiesgo: {
     retosVirales: 0,
@@ -191,6 +197,7 @@ export const defaultValuesSecundaria: FormValuesSecundaria = {
   tipoGestion: "Estatal",
   sedeSupervisión: "",
   departamento: DEPARTAMENTOS_MENDOZA[0],
+  nombreEstablecimiento: "",
   escuela: "",
   situacionesRiesgo: {
     retosVirales: 0,
@@ -219,6 +226,7 @@ export const defaultValuesAdultos: FormValuesAdultos = {
   tipoGestion: "Estatal",
   sedeSupervisión: "",
   departamento: DEPARTAMENTOS_MENDOZA[0],
+  nombreEstablecimiento: "",
   escuela: "",
   situacionesRiesgo: {
     retosVirales: 0,

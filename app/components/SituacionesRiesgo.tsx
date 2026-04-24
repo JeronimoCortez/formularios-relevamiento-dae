@@ -1,39 +1,84 @@
 // components/SituacionesRiesgo.tsx
 "use client";
-import { useFormContext } from "react-hook-form";
+import { useFormContext, useWatch } from "react-hook-form";
 
 export function SituacionesRiesgo() {
   const {
     register,
-    watch,
     formState: { errors },
   } = useFormContext();
 
-  const sr = watch("situacionesRiesgo");
-  const total =
-    Number(sr?.retosVirales ?? 0) +
-    Number(sr?.amenazas ?? 0) +
-    Number(sr?.conflictosPares ?? 0) +
-    Number(sr?.conflictividadDigital ?? 0) +
-    Number(sr?.otrosRiesgos ?? 0);
+  const descripcionValue =
+    useWatch({ name: "situacionesRiesgo.descripcion" }) || "";
 
-  const srErrors = errors.situacionesRiesgo as Record<string, { message?: string }> | undefined;
+  const palabras =
+    descripcionValue.trim() === ""
+      ? 0
+      : descripcionValue.trim().split(/\s+/).filter(Boolean).length;
+
+  const retosVirales = Number(
+    useWatch({ name: "situacionesRiesgo.retosVirales" }) ?? 0,
+  );
+  const amenazas = Number(
+    useWatch({ name: "situacionesRiesgo.amenazas" }) ?? 0,
+  );
+  const conflictosPares = Number(
+    useWatch({ name: "situacionesRiesgo.conflictosPares" }) ?? 0,
+  );
+  const conflictividadDigital = Number(
+    useWatch({ name: "situacionesRiesgo.conflictividadDigital" }) ?? 0,
+  );
+  const otrosRiesgos = Number(
+    useWatch({ name: "situacionesRiesgo.otrosRiesgos" }) ?? 0,
+  );
+
+  const total =
+    retosVirales +
+    amenazas +
+    conflictosPares +
+    conflictividadDigital +
+    otrosRiesgos;
+
+  const srErrors = errors.situacionesRiesgo as
+    | Record<string, { message?: string }>
+    | undefined;
 
   const campos = [
-    { name: "situacionesRiesgo.retosVirales", label: "Retos virales peligrosos: cantidad de desafios de redes sociales que pongan en riesgo la integridad." },
-    { name: "situacionesRiesgo.amenazas", label: "Amenazas de intimidación pública: Cantidad de casos de falsa alarma o situaciones de alteración de la convivencia escolar." },
-    { name: "situacionesRiesgo.conflictosPares", label: "Conflictos graves entre pares: Cantidad de casos de acoso entre pares o uso indebido de grupos de WhatsApp/redes." },
-    { name: "situacionesRiesgo.conflictividadDigital", label: "Conflictividad en entornos digitales: Cantidad de casos de acoso entre pares o uso indebido de grupos de WhatsApp/redes." },
-    { name: "situacionesRiesgo.otrosRiesgos", label: "Otros riesgos institucionales: Cantidad de situaciones no contempladas en las anteriores que alteren la paz institucional." },
+    {
+      name: "situacionesRiesgo.retosVirales",
+      label:
+        "Retos virales peligrosos: cantidad de desafios de redes sociales que pongan en riesgo la integridad.",
+    },
+    {
+      name: "situacionesRiesgo.amenazas",
+      label:
+        "Amenazas de intimidación pública: Cantidad de casos de falsa alarma o situaciones de alteración de la convivencia escolar.",
+    },
+    {
+      name: "situacionesRiesgo.conflictosPares",
+      label:
+        "Conflictos graves entre pares: Cantidad de casos de acoso entre pares o uso indebido de grupos de WhatsApp/redes.",
+    },
+    {
+      name: "situacionesRiesgo.conflictividadDigital",
+      label:
+        "Conflictividad en entornos digitales: Cantidad de casos de acoso entre pares o uso indebido de grupos de WhatsApp/redes.",
+    },
+    {
+      name: "situacionesRiesgo.otrosRiesgos",
+      label:
+        "Otros riesgos institucionales: Cantidad de situaciones no contempladas en las anteriores que alteren la paz institucional.",
+    },
   ];
 
   return (
     <section className="bg-amber-50 border border-amber-200 rounded-xl p-6">
       <h3 className="text-lg font-semibold text-amber-900 mb-1">
-        Situaciones de Riesgo
+        Situaciones de Riesgo detectadas desde el 15/04/2026
       </h3>
       <p className="text-sm text-amber-700 mb-5">
-        Ingrese la cantidad de casos detectados para cada categoría (0 si no hubo casos).
+        Ingrese la cantidad de casos detectados para cada categoría (0 si no
+        hubo casos).
       </p>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-4 items-start">
@@ -69,11 +114,10 @@ export function SituacionesRiesgo() {
       {total > 0 && (
         <div className="mt-2">
           <label className="block text-sm font-medium text-gray-700 mb-1">
-            Descripción cualitativa{" "}
-            <span className="text-red-500">*</span>
-            <span className="text-xs text-gray-500 ml-1">
-              (requerido porque hay casos registrados)
-            </span>
+            Si registró situaciones de riesgo en los puntos anteriores, describa
+            brevemente las situaciones presentadas de manera sintética,
+            indicando tipo de hecho, cantidad de casos y breve contexto (por
+            ejemplo: curso, modalidad o medio involucrado)
           </label>
           <textarea
             rows={4}
@@ -85,6 +129,11 @@ export function SituacionesRiesgo() {
                 : "border-gray-300 focus:ring-amber-200"
             }`}
           />
+          <p
+            className={`text-xs mt-1 text-right ${palabras > 150 ? "text-red-600 font-semibold" : "text-gray-400"}`}
+          >
+            {palabras}/150 palabras
+          </p>
           {srErrors?.descripcion?.message && (
             <p className="text-xs text-red-600 mt-1">
               {srErrors.descripcion.message}

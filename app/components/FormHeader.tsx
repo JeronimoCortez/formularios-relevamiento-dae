@@ -15,7 +15,7 @@ export function FormHeader({ nivel }: FormHeaderProps) {
         </div>
         <div>
           <p className="text-blue-300 text-xs font-medium uppercase tracking-widest mb-1">
-            Ministerio de Educación · Mendoza
+            Dirección General de Escuelas · Mendoza
           </p>
           <h1 className="text-xl md:text-2xl font-bold leading-tight mb-2">
             Relevamiento Provincial: Operativo Territorial de Responsabilidad Parental,
@@ -39,7 +39,7 @@ export function FormHeader({ nivel }: FormHeaderProps) {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-sm">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
           <div className="bg-white/5 rounded-lg px-3 py-2">
             <p className="text-blue-300 text-xs font-medium mb-0.5">Responsable</p>
             <p className="text-white text-xs">Equipo directivo del establecimiento</p>
@@ -47,10 +47,6 @@ export function FormHeader({ nivel }: FormHeaderProps) {
           <div className="bg-white/5 rounded-lg px-3 py-2">
             <p className="text-blue-300 text-xs font-medium mb-0.5">Período de carga</p>
             <p className="text-white text-xs font-semibold">07 al 13 de mayo de 2026</p>
-          </div>
-          <div className="bg-white/5 rounded-lg px-3 py-2">
-            <p className="text-blue-300 text-xs font-medium mb-0.5">Verificar antes de enviar</p>
-            <p className="text-white text-xs">Sumatorias por año/ciclo</p>
           </div>
         </div>
       </div>

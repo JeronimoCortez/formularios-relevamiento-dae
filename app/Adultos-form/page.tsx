@@ -8,7 +8,6 @@ import { FormHeader } from "../components/FormHeader";
 import { CamposGenerales } from "../components/CamposGeneralesPrimaria";
 import { GradoRow } from "../components/GradoRow";
 import { SituacionesRiesgo } from "../components/SituacionesRiesgo";
-import { VulneracionDerechos } from "../components/VulneracionDerechos";
 import { SubmitButton } from "../components/SubmitButton";
 import { SuccessMessage } from "../components/SuccessMessage";
 
@@ -96,10 +95,6 @@ export default function FormularioAdultos() {
 
             <div className="mb-6">
               <SituacionesRiesgo />
-            </div>
-
-            <div className="mb-6">
-              <VulneracionDerechos />
             </div>
 
             {serverError && (

@@ -18,7 +18,15 @@ export function CamposGenerales({
 
   const tipoGestion = watch("tipoGestion");
 
-  const sedesEstatal = Array.from({ length: 60 }, (_, i) => String(i + 1));
+  const sedesEstatal = [
+    ...Array.from({ length: 9 }, (_, i) => String(i + 1)),
+    "10 Este",
+    "10 Oeste",
+    ...Array.from({ length: 43 }, (_, i) => String(i + 11)),
+    "54",
+    "54 Hogar",
+    ...Array.from({ length: 4 }, (_, i) => String(i + 55)),
+  ];
   const sedesPrivada = Array.from({ length: 8 }, (_, i) => String(i + 1));
   const sedes = tipoGestion === "Privada" ? sedesPrivada : sedesEstatal;
 
@@ -68,7 +76,9 @@ export function CamposGenerales({
             }`}
           >
             <option value="">
-              {!tipoGestion ? "Seleccione primero el tipo de gestión" : "— Seleccione sede —"}
+              {!tipoGestion
+                ? "Seleccione primero el tipo de gestión"
+                : "— Seleccione sede —"}
             </option>
             {sedes.map((s) => (
               <option key={s} value={s}>
@@ -111,14 +121,15 @@ export function CamposGenerales({
         </div>
 
         {/* Escuela */}
+        {/* Escuela */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
-            Numero del establecimiento <span className="text-red-500">*</span>
+            Número del establecimiento <span className="text-red-500">*</span>
           </label>
           <input
             type="text"
             {...register("escuela")}
-            placeholder="Numero sin guiones"
+            placeholder="Número sin guiones"
             className={`w-full border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 ${
               errors.escuela
                 ? "border-red-400 focus:ring-red-200"
@@ -128,6 +139,28 @@ export function CamposGenerales({
           {errors.escuela?.message && (
             <p className="text-xs text-red-600 mt-1">
               {String(errors.escuela.message)}
+            </p>
+          )}
+        </div>
+
+        {/* Nombre del establecimiento */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Nombre del establecimiento <span className="text-red-500">*</span>
+          </label>
+          <input
+            type="text"
+            {...register("nombreEstablecimiento")}
+            placeholder="Nombre completo del establecimiento"
+            className={`w-full border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 ${
+              errors.nombreEstablecimiento
+                ? "border-red-400 focus:ring-red-200"
+                : "border-gray-300 focus:ring-blue-200"
+            }`}
+          />
+          {errors.nombreEstablecimiento?.message && (
+            <p className="text-xs text-red-600 mt-1">
+              {String(errors.nombreEstablecimiento.message)}
             </p>
           )}
         </div>

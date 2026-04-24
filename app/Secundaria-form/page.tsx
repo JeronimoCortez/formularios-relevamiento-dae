@@ -8,7 +8,6 @@ import { FormHeader } from "../components/FormHeader";
 import { CamposGenerales } from "../components/CamposGeneralesPrimaria";
 import { GradoRow } from "../components/GradoRow";
 import { SituacionesRiesgo } from "../components/SituacionesRiesgo";
-import { VulneracionDerechos } from "../components/VulneracionDerechos";
 import { SuccessMessage } from "../components/SuccessMessage";
 import { SubmitButton } from "../components/SubmitButton";
 
@@ -99,9 +98,7 @@ export default function FormularioSecundaria() {
               <SituacionesRiesgo />
             </div>
 
-            <div className="mb-6">
-              <VulneracionDerechos />
-            </div>
+       
 
             {serverError && (
               <div className="mb-4 bg-red-50 border border-red-300 rounded-lg px-4 py-3 text-sm text-red-700 flex items-start gap-2">

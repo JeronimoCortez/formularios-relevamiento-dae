@@ -10,6 +10,7 @@ import {
   buildPrimariaSheetRow,
   buildRowSecundaria,
   buildRowAdultos,
+  existsRowByEmail,
 } from "@/googleSheets";
 
 export async function POST(req: NextRequest) {
@@ -37,6 +38,22 @@ export async function POST(req: NextRequest) {
             errors: parsed.error.flatten(),
           },
           { status: 422 }
+        );
+      }
+
+      const duplicatedEmail = await existsRowByEmail(
+        tipo,
+        parsed.data.correoElectronico
+      );
+
+      if (duplicatedEmail) {
+        return NextResponse.json(
+          {
+            success: false,
+            message:
+              "Ya existe un registro con ese correo electrónico. Verifique el email.",
+          },
+          { status: 409 }
         );
       }
 

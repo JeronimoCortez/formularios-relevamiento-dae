@@ -28,6 +28,7 @@ type VulneracionData = {
 type BaseFormData = Record<string, unknown> & {
   tipoGestion: string;
   departamento: string;
+  nombreEstablecimiento: string;
   escuela: string;
 };
 
@@ -199,6 +200,76 @@ async function getSheetHeaders(sheetName: string) {
   return headers;
 }
 
+function normalizeText(value: string) {
+  return value
+    .trim()
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "");
+}
+
+function normalizeEmail(email: string) {
+  return email.trim().toLowerCase();
+}
+
+function getColumnLetter(index: number) {
+  let dividend = index + 1;
+  let column = "";
+
+  while (dividend > 0) {
+    const modulo = (dividend - 1) % 26;
+    column = String.fromCharCode(65 + modulo) + column;
+    dividend = Math.floor((dividend - modulo) / 26);
+  }
+
+  return column;
+}
+
+function findEmailHeaderIndex(headers: string[]) {
+  return headers.findIndex((header) => {
+    const normalizedHeader = normalizeText(header);
+
+    return (
+      normalizedHeader.includes("correo") ||
+      normalizedHeader.includes("email") ||
+      normalizedHeader.includes("e-mail")
+    );
+  });
+}
+
+export async function existsRowByEmail(
+  tipo: TipoFormulario,
+  email: string
+): Promise<boolean> {
+  const normalizedEmail = normalizeEmail(email);
+
+  if (!normalizedEmail) {
+    return false;
+  }
+
+  const sheets = getSheetsClient();
+  const spreadsheetId = getSpreadsheetId();
+  const sheetName = SHEET_NAMES[tipo];
+  const headers = await getSheetHeaders(sheetName);
+  const emailHeaderIndex = findEmailHeaderIndex(headers);
+
+  if (emailHeaderIndex === -1) {
+    throw new Error(
+      `No se encontró una columna de correo electrónico en la hoja "${sheetName}"`
+    );
+  }
+
+  const emailColumn = getColumnLetter(emailHeaderIndex);
+  const response = await sheets.spreadsheets.values.get({
+    spreadsheetId,
+    range: `${sheetName}!${emailColumn}2:${emailColumn}`,
+  });
+
+  const values = response.data.values?.flat().map((value) => String(value)) ?? [];
+
+  return values.some((value) => normalizeEmail(value) === normalizedEmail);
+}
+
 export async function appendRow(
   tipo: TipoFormulario,
   values: CellValue[]
@@ -248,36 +319,13 @@ export function buildPrimariaSheetRow(data: FormDataPrimaria): Record<string, Ce
 
   const row: Record<string, CellValue> = {
     "Marca temporal": getTimestamp(),
-    "Dirección de correo electrónico": "",
+    "Dirección de correo electrónico": data.correoElectronico,
     "Gestión a la que pertenece la institución educativa": data.tipoGestion,
     "Departamento en la que está ubicada la institución educativa": data.departamento,
     "Sección de supervisión a la que pertene la institución educativa": sedeSupervision,
+    "Nombre del establecimiento": data.nombreEstablecimiento,
     "Número de la institución (solo número sin guión)": data.escuela,
-    "Retos Virales Peligrosos: Cantidad de desafíos de redes sociales que pongan en riesgo la integridad.":
-      data.situacionesRiesgo.retosVirales,
-    "Amenazas de Intimidación Pública: Cantidad de casos de falsa alarma o situaciones de alteración de la convivencia escolar.":
-      data.situacionesRiesgo.amenazas,
-    "Conflictividad en Entornos Digitales: Cantidad de casos de acoso entre pares o uso indebido de grupos de WhatsApp/redes.":
-      data.situacionesRiesgo.conflictosPares + data.situacionesRiesgo.conflictividadDigital,
-    "Otros Riesgos Institucionales: Cantidad de situaciones no contempladas en las anteriores que alteren la paz institucional.":
-      data.situacionesRiesgo.otrosRiesgos,
-    'Esta pregunta es obligatoria para quienes hayan reportado un número mayor a ""0"" en la sección anterior.\nDescriba brevemente las situaciones de riesgo identificadas, mencionando el carácter de la problemática':
-      data.situacionesRiesgo.descripcion,
-    "¿Se detectaron casos de vulneración de Derechos / Negligencia?":
-      data.vulneracion.detectados === "si" ? "Si" : "No",
-    "Si la respuesta es sí indicar la cantidad de casos donde se detectó omisión de cuidados y se requirió la intervención al ETI/Organismos de protección.":
-      data.vulneracion.cantidadCasos ?? 0,
-    "En caso de haber reportado vulneración de derechos, describa brevemente el carácter de las mismas.":
-      data.vulneracion.descripcion ?? "",
   };
-
-  const emailHeader = Object.keys(row).find((header) =>
-    header.toLowerCase().includes("correo")
-  );
-
-  if (emailHeader) {
-    row[emailHeader] = data.correoElectronico;
-  }
 
   const gradosPrimaria = [
     {
@@ -286,8 +334,6 @@ export function buildPrimariaSheetRow(data: FormDataPrimaria): Record<string, Ce
       notificadas: "Familias efectivamente notificadas (Firma de Circular)",
       acta: "Familias notificadas por Acta Supletoria (Negativa de firma)",
       ausentes: "Familias ausentes",
-      valida:
-        "Sume las tres categorías anteriores  (Notificadas + Actas Supletorias + Ausentes) y valide: ¿el número es igual a la matrícula?",
     },
     {
       key: "2°",
@@ -295,8 +341,6 @@ export function buildPrimariaSheetRow(data: FormDataPrimaria): Record<string, Ce
       notificadas: "Familias efectivamente notificadas (Firma de Circular) 2",
       acta: "Familias notificadas por Acta Supletoria (Negativa de firma) 2",
       ausentes: "Familias ausentes 2",
-      valida:
-        "Sume las tres categorías anteriores  (Notificadas + Actas Supletorias + Ausentes) y valide: ¿el número es igual a la matrícula? 2",
     },
     {
       key: "3°",
@@ -304,8 +348,6 @@ export function buildPrimariaSheetRow(data: FormDataPrimaria): Record<string, Ce
       notificadas: "Familias efectivamente notificadas (Firma de Circular) 3",
       acta: "Familias notificadas por Acta Supletoria (Negativa de firma) 3",
       ausentes: "Familias ausentes 3",
-      valida:
-        "Sume las tres categorías anteriores  (Notificadas + Actas Supletorias + Ausentes) y valide: ¿el número es igual a la matrícula? 3",
     },
     {
       key: "4°",
@@ -313,8 +355,6 @@ export function buildPrimariaSheetRow(data: FormDataPrimaria): Record<string, Ce
       notificadas: "Familias efectivamente notificadas (Firma de Circular) 4",
       acta: "Familias notificadas por Acta Supletoria (Negativa de firma) 4",
       ausentes: "Familias ausentes 4",
-      valida:
-        "Sume las tres categorías anteriores  (Notificadas + Actas Supletorias + Ausentes) y valide: ¿el número es igual a la matrícula? 4",
     },
     {
       key: "5°",
@@ -322,8 +362,6 @@ export function buildPrimariaSheetRow(data: FormDataPrimaria): Record<string, Ce
       notificadas: "Familias efectivamente notificadas (Firma de Circular) 5",
       acta: "Familias notificadas por Acta Supletoria (Negativa de firma) 5",
       ausentes: "Familias ausentes 5",
-      valida:
-        "Sume las tres categorías anteriores  (Notificadas + Actas Supletorias + Ausentes) y valide: ¿el número es igual a la matrícula? 5",
     },
     {
       key: "6°",
@@ -331,8 +369,6 @@ export function buildPrimariaSheetRow(data: FormDataPrimaria): Record<string, Ce
       notificadas: "Familias efectivamente notificadas (Firma de Circular) 6",
       acta: "Familias notificadas por Acta Supletoria (Negativa de firma) 6",
       ausentes: "Familias ausentes 6",
-      valida:
-        "Sume las tres categorías anteriores  (Notificadas + Actas Supletorias + Ausentes) y valide: ¿el número es igual a la matrícula? 6",
     },
     {
       key: "7°",
@@ -340,24 +376,32 @@ export function buildPrimariaSheetRow(data: FormDataPrimaria): Record<string, Ce
       notificadas: "Familias efectivamente notificadas (Firma de Circular) 7",
       acta: "Familias notificadas por Acta Supletoria (Negativa de firma) 7",
       ausentes: "Familias ausentes 7",
-      valida:
-        "Sume las tres categorías anteriores  (Notificadas + Actas Supletorias + Ausentes) y valide: ¿el número es igual a la matrícula? 7",
     },
   ] as const;
 
   for (const gradoInfo of gradosPrimaria) {
     const grado = data.grados[gradoInfo.key];
-
     row[gradoInfo.matricula] = grado.matricula;
     row[gradoInfo.notificadas] = grado.notificadas;
     row[gradoInfo.acta] = grado.actaSupletoria;
     row[gradoInfo.ausentes] = grado.ausentes;
-    row[gradoInfo.valida] = validacionSuma(grado);
   }
+
+  row["Retos Virales Peligrosos: Cantidad de desafíos de redes sociales que pongan en riesgo la integridad."] =
+    data.situacionesRiesgo.retosVirales;
+  row["Amenazas de Intimidación Pública: Cantidad de casos de falsa alarma o situaciones de alteración de la convivencia escolar."] =
+    data.situacionesRiesgo.amenazas;
+  row["Conflictividad en Entornos Digitales: Cantidad de casos de acoso entre pares o uso indebido de grupos de WhatsApp/redes."] =
+    data.situacionesRiesgo.conflictosPares + data.situacionesRiesgo.conflictividadDigital;
+  row["Otros Riesgos Institucionales: Cantidad de situaciones no contempladas en las anteriores que alteren la paz institucional."] =
+    data.situacionesRiesgo.otrosRiesgos;
+  row['Esta pregunta es obligatoria para quienes hayan reportado un número mayor a ""0"" en la sección anterior.Describa brevemente las situaciones de riesgo identificadas, mencionando el carácter de la problemática'] =
+    data.situacionesRiesgo.descripcion;
+  row["Si registró situaciones de riesgo en los puntos anteriores, describa brevemente las situaciones presentadas de manera sintética, indicando tipo de hecho, cantidad de casos y breve contexto (por ejemplo: curso, modalidad o medio involucrado)"] =
+    data.situacionesRiesgo.descripcion;
 
   return row;
 }
-
 export function buildRowPrimaria(data: FormDataPrimaria): CellValue[] {
   const gradoKeys = ["1°", "2°", "3°", "4°", "5°", "6°", "7°"];
   const gradosRow = gradoKeys.flatMap((gradoKey) => gradoToRow(data.grados[gradoKey]));
