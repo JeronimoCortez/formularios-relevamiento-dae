@@ -45,14 +45,9 @@ GOOGLE_SHEET_ID=1ABC...xyz
 
 ### 6. Encabezados de cada hoja Google Sheets
 
-**Hoja "Primaria" y "Secundaria" - Fila 1:**
+**Hoja "Primaria" - Fila 1:**
 ```
 Timestamp | Tipo Gestión | Sede Supervisión | Departamento | Escuela | [Año 1°] Matrícula | [Año 1°] Notificadas | [Año 1°] Acta Supl. | [Año 1°] Ausentes | [Año 2°] Matrícula | [Año 2°] Notificadas | [Año 2°] Acta Supl. | [Año 2°] Ausentes | [Año 3°] Matrícula | [Año 3°] Notificadas | [Año 3°] Acta Supl. | [Año 3°] Ausentes | [Año 4°] Matrícula | [Año 4°] Notificadas | [Año 4°] Acta Supl. | [Año 4°] Ausentes | [Año 5°] Matrícula | [Año 5°] Notificadas | [Año 5°] Acta Supl. | [Año 5°] Ausentes | [Año 6°] Matrícula | [Año 6°] Notificadas | [Año 6°] Acta Supl. | [Año 6°] Ausentes | [Año 7°] Matrícula | [Año 7°] Notificadas | [Año 7°] Acta Supl. | [Año 7°] Ausentes | Retos Virales | Amenazas | Conflictos Pares | Conflictividad Digital | Otros Riesgos | Descripción Riesgos | Vulneración Derechos | Cantidad Casos | Descripción Vulneración
-```
-
-**Hoja "Adultos" - Fila 1:**
-```
-Timestamp | Tipo Gestión | Sede Supervisión | Departamento | Escuela | [Ciclo Básico] Matrícula | [Ciclo Básico] Notificadas | [Ciclo Básico] Acta Supl. | [Ciclo Básico] Ausentes | [Ciclo Orientado] Matrícula | [Ciclo Orientado] Notificadas | [Ciclo Orientado] Acta Supl. | [Ciclo Orientado] Ausentes | Retos Virales | Amenazas | Conflictos Pares | Conflictividad Digital | Otros Riesgos | Descripción Riesgos | Vulneración Derechos | Cantidad Casos | Descripción Vulneración
 ```
 
 ## Deploy en Vercel
