@@ -76,7 +76,7 @@ export default function FormularioSecundaria() {
 
         <FormProvider {...methods}>
           <form onSubmit={handleSubmit(onSubmit)} noValidate>
-            <CamposGenerales />
+            <CamposGenerales mostrarModalidad mostrarCorreoElectronico tipoSedes="secundaria"/>
 
             <section className="bg-white border border-gray-200 rounded-xl p-6 mb-6">
               <div className="flex items-center justify-between mb-2">
@@ -111,8 +111,8 @@ export default function FormularioSecundaria() {
                 <span className="text-gray-400 font-normal">(opcional)</span>
               </label>
               <p className="text-xs text-gray-500 mb-3">
-                ¿Identificás en tu institución situaciones, conductas o
-                dinámicas que estén generando tensión o preocupación en la
+                ¿Identificás en la institución situaciones, conductas o
+                dinámicas que generan tensión o preocupación en la
                 comunidad educativa, que aún no estén contempladas en los
                 protocolos existentes o que todavía no sabés bien cómo
                 nombrarlas ni a quién derivarlas? Contanos con tus palabras.

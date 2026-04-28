@@ -50,15 +50,15 @@ const situacionesRiesgoSchema = z
       data.conflictosPares +
       data.conflictividadDigital +
       data.otrosRiesgos;
-    
-    
+
+
   });
 
 const vulneracionSchema = z
   .object({
     detectados: z.enum(["si", "no"]).refine(Boolean, {
-  message: "Debe seleccionar una opción",
-}),
+      message: "Debe seleccionar una opción",
+    }),
     cantidadCasos: z.coerce.number().int().min(0).optional(),
     descripcion: z.string().optional(),
   })
@@ -119,7 +119,9 @@ export const schemaPrimaria = camposGeneralesSchema.extend({
 });
 
 export const schemaSecundaria = camposGeneralesSchema.extend({
-   situacionesNoContempladas: z.string().optional(),
+  modalidad: z.enum(["Técnica", "Orientada"], { message: "Debe seleccionar una modalidad" }),
+  situacionesNoContempladas: z.string().optional(),
+  correoElectronico: correoElectronicoSchema,  // ✅ igual que primaria
   grados: makeGradosSchema(["1°", "2°", "3°", "4°", "5°", "6°"]),
 });
 
@@ -217,6 +219,8 @@ export const defaultValuesSecundaria: FormValuesSecundaria = {
     "6°": { matricula: 0, notificadas: 0, actaSupletoria: 0, ausentes: 0 },
   },
   situacionesNoContempladas: "",
+  modalidad: undefined as unknown as "Técnica" | "Orientada",
+  correoElectronico: "",
 };
 
 export const defaultValuesAdultos: FormValuesAdultos = {

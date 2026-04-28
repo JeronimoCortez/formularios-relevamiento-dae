@@ -171,12 +171,7 @@ export default function Home() {
             <li className="list-disc ml-5 marker:text-blue-500">
               El presente formulario deberá ser completado una vez finalizado el
               operativo de relevamiento y agotadas todas las instancias
-              institucionales de citación a madres, padres y/o tutores.
-              (Confirmar este texto)
-            </li>
-            <li className="list-disc ml-5 marker:text-blue-500">
-              Este formulario tiene carácter de{" "}
-              <strong>Declaración Jurada</strong>.
+              institucionales de citación a madres, padres y/o tutores.    
             </li>
           </ul>
         </div>

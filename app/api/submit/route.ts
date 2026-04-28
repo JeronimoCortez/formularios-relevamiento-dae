@@ -73,7 +73,7 @@ export async function POST(req: NextRequest) {
         );
       }
 
-      row = buildRowSecundaria(
+      rowByHeaders = buildRowSecundaria(
         parsed.data as Parameters<typeof buildRowSecundaria>[0]
       );
     } else if (tipo === "adultos") {

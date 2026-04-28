@@ -45,6 +45,8 @@ type FormDataSecundaria = BaseFormData & {
   situacionesRiesgo: SituacionesData;
   vulneracion: VulneracionData;
   situacionesNoContempladas?: string;
+  modalidad?: string;
+  correoElectronico: string;
 };
 
 type FormDataAdultos = BaseFormData & {
@@ -398,7 +400,7 @@ export function buildPrimariaSheetRow(data: FormDataPrimaria): Record<string, Ce
   row["Otros Riesgos Institucionales: Cantidad de situaciones no contempladas en las anteriores que alteren la paz institucional."] =
     data.situacionesRiesgo.otrosRiesgos;
   row["Situaciones no contempladas en protocolos: Describí con tus palabras situaciones, conductas o dinámicas que generan tensión o preocupación en la comunidad educativa y que aún no sabés cómo nombrarlas o a quién derivarlas."] =
-  data.situacionesNoContempladas ?? "";
+    data.situacionesNoContempladas ?? "";
 
   return row;
 }
@@ -414,17 +416,89 @@ export function buildRowPrimaria(data: FormDataPrimaria): CellValue[] {
   ];
 }
 
-export function buildRowSecundaria(data: FormDataSecundaria): CellValue[] {
-  const gradoKeys = ["1°", "2°", "3°", "4°", "5°", "6°"];
-  const gradosRow = gradoKeys.flatMap((gradoKey) => gradoToRow(data.grados[gradoKey]));
 
-  return [
-    ...camposBase(data),
-    ...gradosRow,
-    ...situacionesToRow(data.situacionesRiesgo),
-    ...vulneracionToRow(data.vulneracion),
-    data.situacionesNoContempladas ?? "",
-  ];
+export function buildRowSecundaria(data: FormDataSecundaria): Record<string, CellValue> {
+  const sedeSupervision = formatSedeSupervision(
+    data.tipoGestion,
+    getSedeSupervision(data)
+  );
+
+  const row: Record<string, CellValue> = {
+    "Marca temporal": getTimestamp(),
+    "Dirección de correo electrónico": data.correoElectronico ?? "",
+    "Gestión a la que pertenece la institución educativa": data.tipoGestion,
+    "Modalidad": data.modalidad ?? "",
+    "Departamento en la que está ubicada la institución educativa": data.departamento,
+    "Sección de supervisión a la que pertene la institución educativa": sedeSupervision,
+    "Nombre del establecimiento": data.nombreEstablecimiento,
+    "Número de la institución (solo número sin guión)": data.escuela,
+  };
+
+  const gradosSecundaria = [
+    {
+      key: "1°",
+      matricula: "Matrícula total de 1º GRADO: (Tener en cuenta todas las secciones y turnos)",
+      notificadas: "Familias efectivamente notificadas (Firma de Circular)",
+      acta: "Familias notificadas por Acta Supletoria (Negativa de firma)",
+      ausentes: "Familias ausentes",
+    },
+    {
+      key: "2°",
+      matricula: "Matrícula total de 2º GRADO: (Tener en cuenta todas las secciones y turnos)",
+      notificadas: "Familias efectivamente notificadas (Firma de Circular) 2",
+      acta: "Familias notificadas por Acta Supletoria (Negativa de firma) 2",
+      ausentes: "Familias ausentes 2",
+    },
+    {
+      key: "3°",
+      matricula: "Matrícula total de 3º GRADO: (Tener en cuenta todas las secciones y turnos)",
+      notificadas: "Familias efectivamente notificadas (Firma de Circular) 3",
+      acta: "Familias notificadas por Acta Supletoria (Negativa de firma) 3",
+      ausentes: "Familias ausentes 3",
+    },
+    {
+      key: "4°",
+      matricula: "Matrícula total de 4º GRADO: (Tener en cuenta todas las secciones y turnos)",
+      notificadas: "Familias efectivamente notificadas (Firma de Circular) 4",
+      acta: "Familias notificadas por Acta Supletoria (Negativa de firma) 4",
+      ausentes: "Familias ausentes 4",
+    },
+    {
+      key: "5°",
+      matricula: "Matrícula total de 5º GRADO: (Tener en cuenta todas las secciones y turnos)",
+      notificadas: "Familias efectivamente notificadas (Firma de Circular) 5",
+      acta: "Familias notificadas por Acta Supletoria (Negativa de firma) 5",
+      ausentes: "Familias ausentes 5",
+    },
+    {
+      key: "6°",
+      matricula: "Matrícula total de 6º GRADO: (Tener en cuenta todas las secciones y turnos)",
+      notificadas: "Familias efectivamente notificadas (Firma de Circular) 6",
+      acta: "Familias notificadas por Acta Supletoria (Negativa de firma) 6",
+      ausentes: "Familias ausentes 6",
+    },
+  ] as const;
+
+  for (const gradoInfo of gradosSecundaria) {
+    const grado = data.grados[gradoInfo.key];
+    row[gradoInfo.matricula] = grado.matricula;
+    row[gradoInfo.notificadas] = grado.notificadas;
+    row[gradoInfo.acta] = grado.actaSupletoria;
+    row[gradoInfo.ausentes] = grado.ausentes;
+  }
+
+  row["Retos Virales Peligrosos: Cantidad de desafíos de redes sociales que pongan en riesgo la integridad."] =
+    data.situacionesRiesgo.retosVirales;
+  row["Amenazas de Intimidación Pública: Cantidad de casos de falsa alarma o situaciones de alteración de la convivencia escolar."] =
+    data.situacionesRiesgo.amenazas;
+  row["Conflictividad en Entornos Digitales: Cantidad de casos de acoso entre pares o uso indebido de grupos de WhatsApp/redes."] =
+    data.situacionesRiesgo.conflictosPares + data.situacionesRiesgo.conflictividadDigital;
+  row["Otros Riesgos Institucionales: Cantidad de situaciones no contempladas en las anteriores que alteren la paz institucional."] =
+    data.situacionesRiesgo.otrosRiesgos;
+  row["Situaciones no contempladas en protocolos: Describí con tus palabras situaciones, conductas o dinámicas que generan tensión o preocupación en la comunidad educativa y que aún no sabés cómo nombrarlas o a quién derivarlas."] =
+    data.situacionesNoContempladas ?? "";
+
+  return row;
 }
 
 

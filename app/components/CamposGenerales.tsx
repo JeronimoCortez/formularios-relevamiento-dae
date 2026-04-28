@@ -1,14 +1,17 @@
-// components/CamposGenerales.tsx
 "use client";
 import { useFormContext } from "react-hook-form";
 import { DEPARTAMENTOS_MENDOZA } from "@/types";
 
 type CamposGeneralesProps = {
   mostrarCorreoElectronico?: boolean;
+  mostrarModalidad?: boolean;
+  tipoSedes?: "primaria" | "secundaria";
 };
 
 export function CamposGenerales({
   mostrarCorreoElectronico = false,
+  mostrarModalidad = false,
+  tipoSedes = "primaria",
 }: CamposGeneralesProps) {
   const {
     register,
@@ -17,8 +20,9 @@ export function CamposGenerales({
   } = useFormContext();
 
   const tipoGestion = watch("tipoGestion");
+  const modalidad = watch("modalidad");
 
-  const sedesEstatal = [
+  const sedesEstatalPrimaria = [
     ...Array.from({ length: 9 }, (_, i) => String(i + 1)),
     "10 Este",
     "10 Oeste",
@@ -27,8 +31,20 @@ export function CamposGenerales({
     "54 Hogar",
     ...Array.from({ length: 4 }, (_, i) => String(i + 55)),
   ];
+  const sedesEstatalOrientada = Array.from({ length: 18 }, (_, i) => String(i + 1));
+  const sedesEstatalTecnica = Array.from({ length: 6 }, (_, i) => String(i + 1));
   const sedesPrivada = Array.from({ length: 8 }, (_, i) => String(i + 1));
-  const sedes = tipoGestion === "Privada" ? sedesPrivada : sedesEstatal;
+
+  const sedes =
+    tipoGestion === "Privada"
+      ? sedesPrivada
+      : tipoSedes === "secundaria"
+      ? modalidad === "Técnica"
+        ? sedesEstatalTecnica
+        : modalidad === "Orientada"
+        ? sedesEstatalOrientada
+        : []
+      : sedesEstatalPrimaria;
 
   return (
     <section className="bg-white border border-gray-200 rounded-xl p-6 mb-6">
@@ -61,14 +77,43 @@ export function CamposGenerales({
           )}
         </div>
 
-        {/* Sede de supervisión (dinámico) */}
+        {/* Modalidad */}
+        {mostrarModalidad && (
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Modalidad <span className="text-red-500">*</span>
+            </label>
+            <select
+              {...register("modalidad")}
+              className={`w-full border rounded-md px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 ${
+                errors.modalidad
+                  ? "border-red-400 focus:ring-red-200"
+                  : "border-gray-300 focus:ring-blue-200"
+              }`}
+            >
+              <option value="">— Seleccione modalidad —</option>
+              <option value="Técnica">Técnica</option>
+              <option value="Orientada">Orientada</option>
+            </select>
+            {errors.modalidad?.message && (
+              <p className="text-xs text-red-600 mt-1">
+                {String(errors.modalidad.message)}
+              </p>
+            )}
+          </div>
+        )}
+
+        {/* Sede de supervisión */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
             Sede de supervisión <span className="text-red-500">*</span>
           </label>
           <select
             {...register("sedeSupervisión")}
-            disabled={!tipoGestion}
+            disabled={
+              !tipoGestion ||
+              (tipoSedes === "secundaria" && tipoGestion === "Estatal" && !modalidad)
+            }
             className={`w-full border rounded-md px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 disabled:bg-gray-100 disabled:cursor-not-allowed ${
               errors.sedeSupervisión
                 ? "border-red-400 focus:ring-red-200"
@@ -78,6 +123,8 @@ export function CamposGenerales({
             <option value="">
               {!tipoGestion
                 ? "Seleccione primero el tipo de gestión"
+                : tipoSedes === "secundaria" && tipoGestion === "Estatal" && !modalidad
+                ? "Seleccione primero la modalidad"
                 : "— Seleccione sede —"}
             </option>
             {sedes.map((s) => (
@@ -120,8 +167,7 @@ export function CamposGenerales({
           )}
         </div>
 
-        {/* Escuela */}
-        {/* Escuela */}
+        {/* Número del establecimiento */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
             Número del establecimiento <span className="text-red-500">*</span>
@@ -165,6 +211,7 @@ export function CamposGenerales({
           )}
         </div>
 
+        {/* Correo electrónico */}
         {mostrarCorreoElectronico && (
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">

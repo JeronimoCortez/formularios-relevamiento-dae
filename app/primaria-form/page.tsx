@@ -106,8 +106,8 @@ export default function FormularioPrimaria() {
                 <span className="text-gray-400 font-normal">(opcional)</span>
               </label>
               <p className="text-xs text-gray-500 mb-3">
-                ¿Identificás en tu institución situaciones, conductas o
-                dinámicas que estén generando tensión o preocupación en la
+                ¿Identificás en la institución situaciones, conductas o
+                dinámicas que generan tensión o preocupación en la
                 comunidad educativa, que aún no estén contempladas en los
                 protocolos existentes o que todavía no sabés bien cómo
                 nombrarlas ni a quién derivarlas? Contanos con tus palabras.
