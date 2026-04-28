@@ -83,9 +83,6 @@ export default function FormularioSecundaria() {
                 <h3 className="text-base font-semibold text-gray-800">
                   Relevamiento por Año
                 </h3>
-                <span className="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full font-medium">
-                  Verificar sumatorias
-                </span>
               </div>
               <p className="text-xs text-gray-500 mb-5">
                 Para cada año: notificadas + acta supletoria + ausentes debe ser
