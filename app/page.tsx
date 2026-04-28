@@ -47,7 +47,7 @@ const formularios = [
   {
     href: "/adultos-form",
     nivel: "Jóvenes y Adultos",
-    descripcion: "Ciclo Básico y Orientado",
+    descripcion: "Nivel primario y secundario.",
     color: "violet",
     icon: (
       <svg
