@@ -28,12 +28,6 @@ export function SuccessMessage({ nivel, onReset }: SuccessMessageProps) {
         </p>
 
         <div className="flex flex-col sm:flex-row gap-3 justify-center">
-          <button
-            onClick={onReset}
-            className="px-6 py-2.5 bg-blue-700 hover:bg-blue-800 text-white rounded-lg text-sm font-medium transition-colors"
-          >
-            Cargar otro establecimiento
-          </button>
           <a
             href="/"
             className="px-6 py-2.5 border border-gray-300 hover:bg-gray-50 text-gray-700 rounded-lg text-sm font-medium transition-colors"
