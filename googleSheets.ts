@@ -16,7 +16,7 @@ type SituacionesData = {
   conflictosPares: number;
   conflictividadDigital: number;
   otrosRiesgos: number;
-  descripcion: string;
+  descripcion?: string;
 };
 
 type VulneracionData = {
@@ -162,7 +162,7 @@ function situacionesToRow(situaciones: SituacionesData): CellValue[] {
     situaciones.conflictosPares,
     situaciones.conflictividadDigital,
     situaciones.otrosRiesgos,
-    situaciones.descripcion,
+    situaciones.descripcion ?? "",
   ];
 }
 
@@ -397,10 +397,6 @@ export function buildPrimariaSheetRow(data: FormDataPrimaria): Record<string, Ce
     data.situacionesRiesgo.conflictosPares + data.situacionesRiesgo.conflictividadDigital;
   row["Otros Riesgos Institucionales: Cantidad de situaciones no contempladas en las anteriores que alteren la paz institucional."] =
     data.situacionesRiesgo.otrosRiesgos;
-  row['Esta pregunta es obligatoria para quienes hayan reportado un número mayor a ""0"" en la sección anterior.Describa brevemente las situaciones de riesgo identificadas, mencionando el carácter de la problemática'] =
-    data.situacionesRiesgo.descripcion;
-  row["Si registró situaciones de riesgo en los puntos anteriores, describa brevemente las situaciones presentadas de manera sintética, indicando tipo de hecho, cantidad de casos y breve contexto (por ejemplo: curso, modalidad o medio involucrado)"] =
-    data.situacionesRiesgo.descripcion;
   row["Situaciones no contempladas en protocolos: Describí con tus palabras situaciones, conductas o dinámicas que generan tensión o preocupación en la comunidad educativa y que aún no sabés cómo nombrarlas o a quién derivarlas."] =
   data.situacionesNoContempladas ?? "";
 
