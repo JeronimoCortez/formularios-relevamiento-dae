@@ -5,7 +5,7 @@ import { useForm, FormProvider } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { schemaAdultos, defaultValuesAdultos, type FormValuesAdultos } from "@/schemas/formSchema";
 import { FormHeader } from "../components/FormHeader";
-import { CamposGenerales } from "../components/CamposGeneralesPrimaria";
+import { CamposGenerales } from "../components/CamposGenerales";
 import { GradoRow } from "../components/GradoRow";
 import { SituacionesRiesgo } from "../components/SituacionesRiesgo";
 import { SubmitButton } from "../components/SubmitButton";

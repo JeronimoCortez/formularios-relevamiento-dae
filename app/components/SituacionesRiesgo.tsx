@@ -55,11 +55,6 @@ export function SituacionesRiesgo() {
         "Amenazas de intimidación pública: Cantidad de casos de falsa alarma o situaciones de alteración de la convivencia escolar.",
     },
     {
-      name: "situacionesRiesgo.conflictosPares",
-      label:
-        "Conflictos graves entre pares: Cantidad de casos de acoso entre pares o uso indebido de grupos de WhatsApp/redes.",
-    },
-    {
       name: "situacionesRiesgo.conflictividadDigital",
       label:
         "Conflictividad en entornos digitales: Cantidad de casos de acoso entre pares o uso indebido de grupos de WhatsApp/redes.",
@@ -110,43 +105,7 @@ export function SituacionesRiesgo() {
         })}
       </div>
 
-      {/* Descripción obligatoria si total > 0 */}
-      {total > 0 && (
-        <div className="mt-2">
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Si registró situaciones de riesgo en los puntos anteriores, describa
-            brevemente las situaciones presentadas de manera sintética,
-            indicando tipo de hecho, cantidad de casos y breve contexto (por
-            ejemplo: curso, modalidad o medio involucrado)
-          </label>
-          <textarea
-            rows={4}
-            {...register("situacionesRiesgo.descripcion")}
-            placeholder="Describa brevemente las situaciones de riesgo detectadas..."
-            className={`w-full border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 resize-none ${
-              srErrors?.descripcion?.message
-                ? "border-red-400 focus:ring-red-200"
-                : "border-gray-300 focus:ring-amber-200"
-            }`}
-          />
-          <p
-            className={`text-xs mt-1 text-right ${palabras > 150 ? "text-red-600 font-semibold" : "text-gray-400"}`}
-          >
-            {palabras}/150 palabras
-          </p>
-          {srErrors?.descripcion?.message && (
-            <p className="text-xs text-red-600 mt-1">
-              {srErrors.descripcion.message}
-            </p>
-          )}
-        </div>
-      )}
-
-      {total === 0 && (
-        <p className="text-xs text-amber-600 mt-1 italic">
-          Si registra casos, deberá agregar una descripción cualitativa.
-        </p>
-      )}
+     
     </section>
   );
 }

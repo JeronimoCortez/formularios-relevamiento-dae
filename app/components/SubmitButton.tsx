@@ -10,13 +10,6 @@ export function SubmitButton({ isLoading, hasErrors }: SubmitButtonProps) {
   return (
     <div className="sticky bottom-0 bg-white/95 backdrop-blur border-t border-gray-200 py-4 px-6 -mx-6 mt-8">
       <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
-        <div className="text-xs text-gray-500 flex items-center gap-1.5">
-          <svg className="w-4 h-4 text-blue-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-              d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-          </svg>
-          Verifique las sumatorias antes de enviar. Este formulario tiene carácter de Declaración Jurada.
-        </div>
 
         <button
           type="submit"

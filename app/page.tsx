@@ -165,18 +165,16 @@ export default function Home() {
             Instrucciones generales
           </h3>
           <ul className="space-y-2 text-sm text-gray-600">
-            <li className="flex items-start gap-2">
-              <span className="text-blue-500 font-bold shrink-0">•</span>
+            <li className="list-disc ml-5 marker:text-blue-500">
               Debe ser completado por el equipo directivo del establecimiento.
             </li>
-            <li className="flex items-start gap-2">
-              <span className="text-blue-500 font-bold shrink-0">•</span>
+            <li className="list-disc ml-5 marker:text-blue-500">
               El presente formulario deberá ser completado una vez finalizado el
               operativo de relevamiento y agotadas todas las instancias
-              institucionales de citación a madres, padres y/o tutores. (Confirmar este texto)
+              institucionales de citación a madres, padres y/o tutores.
+              (Confirmar este texto)
             </li>
-            <li className="flex items-start gap-2">
-              <span className="text-blue-500 font-bold shrink-0">•</span>
+            <li className="list-disc ml-5 marker:text-blue-500">
               Este formulario tiene carácter de{" "}
               <strong>Declaración Jurada</strong>.
             </li>

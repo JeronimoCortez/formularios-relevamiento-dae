@@ -41,7 +41,7 @@ const situacionesRiesgoSchema = z
     conflictosPares: z.coerce.number().int().min(0, "No puede ser negativo"),
     conflictividadDigital: z.coerce.number().int().min(0, "No puede ser negativo"),
     otrosRiesgos: z.coerce.number().int().min(0, "No puede ser negativo"),
-    descripcion: z.string(),
+
   })
   .superRefine((data, ctx) => {
     const total =
@@ -50,13 +50,8 @@ const situacionesRiesgoSchema = z
       data.conflictosPares +
       data.conflictividadDigital +
       data.otrosRiesgos;
-    if (total > 0 && data.descripcion.trim().length < 10) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        message: "Debe describir las situaciones de riesgo detectadas (mínimo 10 caracteres)",
-        path: ["descripcion"],
-      });
-    }
+    
+    
   });
 
 const vulneracionSchema = z
@@ -118,11 +113,13 @@ const makeGradosSchema = (grados: readonly string[]) =>
   );
 
 export const schemaPrimaria = camposGeneralesSchema.extend({
+  situacionesNoContempladas: z.string().optional(),
   correoElectronico: correoElectronicoSchema,
   grados: makeGradosSchema(["1°", "2°", "3°", "4°", "5°", "6°", "7°"]),
 });
 
 export const schemaSecundaria = camposGeneralesSchema.extend({
+   situacionesNoContempladas: z.string().optional(),
   grados: makeGradosSchema(["1°", "2°", "3°", "4°", "5°", "6°"]),
 });
 
@@ -175,7 +172,6 @@ export const defaultValuesPrimaria: FormValuesPrimaria = {
     conflictosPares: 0,
     conflictividadDigital: 0,
     otrosRiesgos: 0,
-    descripcion: "",
   },
   vulneracion: {
     detectados: "no",
@@ -191,6 +187,7 @@ export const defaultValuesPrimaria: FormValuesPrimaria = {
     "6°": { matricula: 0, notificadas: 0, actaSupletoria: 0, ausentes: 0 },
     "7°": { matricula: 0, notificadas: 0, actaSupletoria: 0, ausentes: 0 },
   },
+  situacionesNoContempladas: "",
 };
 
 export const defaultValuesSecundaria: FormValuesSecundaria = {
@@ -205,7 +202,6 @@ export const defaultValuesSecundaria: FormValuesSecundaria = {
     conflictosPares: 0,
     conflictividadDigital: 0,
     otrosRiesgos: 0,
-    descripcion: "",
   },
   vulneracion: {
     detectados: "no",
@@ -220,6 +216,7 @@ export const defaultValuesSecundaria: FormValuesSecundaria = {
     "5°": { matricula: 0, notificadas: 0, actaSupletoria: 0, ausentes: 0 },
     "6°": { matricula: 0, notificadas: 0, actaSupletoria: 0, ausentes: 0 },
   },
+  situacionesNoContempladas: "",
 };
 
 export const defaultValuesAdultos: FormValuesAdultos = {
@@ -234,7 +231,6 @@ export const defaultValuesAdultos: FormValuesAdultos = {
     conflictosPares: 0,
     conflictividadDigital: 0,
     otrosRiesgos: 0,
-    descripcion: "",
   },
   vulneracion: {
     detectados: "no",

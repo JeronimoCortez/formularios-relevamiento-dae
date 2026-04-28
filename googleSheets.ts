@@ -37,12 +37,14 @@ type FormDataPrimaria = BaseFormData & {
   grados: Record<string, GradoData>;
   situacionesRiesgo: SituacionesData;
   vulneracion: VulneracionData;
+  situacionesNoContempladas?: string;
 };
 
 type FormDataSecundaria = BaseFormData & {
   grados: Record<string, GradoData>;
   situacionesRiesgo: SituacionesData;
   vulneracion: VulneracionData;
+  situacionesNoContempladas?: string;
 };
 
 type FormDataAdultos = BaseFormData & {
@@ -399,6 +401,8 @@ export function buildPrimariaSheetRow(data: FormDataPrimaria): Record<string, Ce
     data.situacionesRiesgo.descripcion;
   row["Si registró situaciones de riesgo en los puntos anteriores, describa brevemente las situaciones presentadas de manera sintética, indicando tipo de hecho, cantidad de casos y breve contexto (por ejemplo: curso, modalidad o medio involucrado)"] =
     data.situacionesRiesgo.descripcion;
+  row["Situaciones no contempladas en protocolos: Describí con tus palabras situaciones, conductas o dinámicas que generan tensión o preocupación en la comunidad educativa y que aún no sabés cómo nombrarlas o a quién derivarlas."] =
+  data.situacionesNoContempladas ?? "";
 
   return row;
 }
@@ -423,8 +427,10 @@ export function buildRowSecundaria(data: FormDataSecundaria): CellValue[] {
     ...gradosRow,
     ...situacionesToRow(data.situacionesRiesgo),
     ...vulneracionToRow(data.vulneracion),
+    data.situacionesNoContempladas ?? "",
   ];
 }
+
 
 export function buildRowAdultos(data: FormDataAdultos): CellValue[] {
   const cicloKeys = ["Ciclo Básico", "Ciclo Orientado"];
