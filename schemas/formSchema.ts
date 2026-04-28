@@ -126,8 +126,12 @@ export const schemaSecundaria = camposGeneralesSchema.extend({
 });
 
 export const schemaAdultos = camposGeneralesSchema.extend({
-  ciclos: makeGradosSchema(["Ciclo Básico", "Ciclo Orientado"]),
+  modalidad: z.enum(["CEBSA", "CENS"], { message: "Debe seleccionar una modalidad" }),
+  correoElectronico: correoElectronicoSchema,
+  situacionesNoContempladas: z.string().optional(),
+  ciclos: makeGradosSchema(["1°", "2°", "3°"]),
 });
+
 
 export type FormValuesPrimaria = z.infer<typeof schemaPrimaria>;
 export type FormValuesSecundaria = z.infer<typeof schemaSecundaria>;
@@ -229,6 +233,8 @@ export const defaultValuesAdultos: FormValuesAdultos = {
   departamento: DEPARTAMENTOS_MENDOZA[0],
   nombreEstablecimiento: "",
   escuela: "",
+  correoElectronico: "",
+  modalidad: undefined as unknown as "CEBSA" | "CENS",
   situacionesRiesgo: {
     retosVirales: 0,
     amenazas: 0,
@@ -242,7 +248,9 @@ export const defaultValuesAdultos: FormValuesAdultos = {
     descripcion: "",
   },
   ciclos: {
-    "Ciclo Básico": { matricula: 0, notificadas: 0, actaSupletoria: 0, ausentes: 0 },
-    "Ciclo Orientado": { matricula: 0, notificadas: 0, actaSupletoria: 0, ausentes: 0 },
+    "1°": { matricula: 0, notificadas: 0, actaSupletoria: 0, ausentes: 0 },
+    "2°": { matricula: 0, notificadas: 0, actaSupletoria: 0, ausentes: 0 },
+    "3°": { matricula: 0, notificadas: 0, actaSupletoria: 0, ausentes: 0 },
   },
+  situacionesNoContempladas: "",
 };

@@ -50,9 +50,12 @@ type FormDataSecundaria = BaseFormData & {
 };
 
 type FormDataAdultos = BaseFormData & {
+  correoElectronico: string;
+  modalidad?: string;
   ciclos: Record<string, GradoData>;
   situacionesRiesgo: SituacionesData;
   vulneracion: VulneracionData;
+  situacionesNoContempladas?: string;
 };
 
 const SHEET_NAMES: Record<TipoFormulario, string> = {
@@ -502,14 +505,65 @@ export function buildRowSecundaria(data: FormDataSecundaria): Record<string, Cel
 }
 
 
-export function buildRowAdultos(data: FormDataAdultos): CellValue[] {
-  const cicloKeys = ["Ciclo Básico", "Ciclo Orientado"];
-  const ciclosRow = cicloKeys.flatMap((cicloKey) => gradoToRow(data.ciclos[cicloKey]));
+export function buildRowAdultos(data: FormDataAdultos): Record<string, CellValue> {
+  const sedeSupervision = formatSedeSupervision(
+    data.tipoGestion,
+    getSedeSupervision(data)
+  );
 
-  return [
-    ...camposBase(data),
-    ...ciclosRow,
-    ...situacionesToRow(data.situacionesRiesgo),
-    ...vulneracionToRow(data.vulneracion),
-  ];
+  const row: Record<string, CellValue> = {
+    "Marca temporal": getTimestamp(),
+    "Dirección de correo electrónico": data.correoElectronico ?? "",
+    "Gestión a la que pertenece la institución educativa": data.tipoGestion,
+    "Modalidad": data.modalidad ?? "",
+    "Departamento en la que está ubicada la institución educativa": data.departamento,
+    "Sección de supervisión a la que pertene la institución educativa": sedeSupervision,
+    "Nombre del establecimiento": data.nombreEstablecimiento,
+    "Número de la institución (solo número sin guión)": data.escuela,
+  };
+
+  const ciclosAdultos = [
+    {
+      key: "1°",
+      matricula: "Matrícula total de 1º GRADO: (Tener en cuenta todas las secciones y turnos)",
+      notificadas: "Familias efectivamente notificadas (Firma de Circular)",
+      acta: "Familias notificadas por Acta Supletoria (Negativa de firma)",
+      ausentes: "Familias ausentes",
+    },
+    {
+      key: "2°",
+      matricula: "Matrícula total de 2º GRADO: (Tener en cuenta todas las secciones y turnos)",
+      notificadas: "Familias efectivamente notificadas (Firma de Circular) 2",
+      acta: "Familias notificadas por Acta Supletoria (Negativa de firma) 2",
+      ausentes: "Familias ausentes 2",
+    },
+    {
+      key: "3°",
+      matricula: "Matrícula total de 3º GRADO: (Tener en cuenta todas las secciones y turnos)",
+      notificadas: "Familias efectivamente notificadas (Firma de Circular) 3",
+      acta: "Familias notificadas por Acta Supletoria (Negativa de firma) 3",
+      ausentes: "Familias ausentes 3",
+    },
+  ] as const;
+
+  for (const cicloInfo of ciclosAdultos) {
+    const ciclo = data.ciclos[cicloInfo.key];
+    row[cicloInfo.matricula] = ciclo.matricula;
+    row[cicloInfo.notificadas] = ciclo.notificadas;
+    row[cicloInfo.acta] = ciclo.actaSupletoria;
+    row[cicloInfo.ausentes] = ciclo.ausentes;
+  }
+
+  row["Retos Virales Peligrosos: Cantidad de desafíos de redes sociales que pongan en riesgo la integridad."] =
+    data.situacionesRiesgo.retosVirales;
+  row["Amenazas de Intimidación Pública: Cantidad de casos de falsa alarma o situaciones de alteración de la convivencia escolar."] =
+    data.situacionesRiesgo.amenazas;
+  row["Conflictividad en Entornos Digitales: Cantidad de casos de acoso entre pares o uso indebido de grupos de WhatsApp/redes."] =
+    data.situacionesRiesgo.conflictosPares + data.situacionesRiesgo.conflictividadDigital;
+  row["Otros Riesgos Institucionales: Cantidad de situaciones no contempladas en las anteriores que alteren la paz institucional."] =
+    data.situacionesRiesgo.otrosRiesgos;
+  row["Situaciones no contempladas en protocolos: Describí con tus palabras situaciones, conductas o dinámicas que generan tensión o preocupación en la comunidad educativa y que aún no sabés cómo nombrarlas o a quién derivarlas."] =
+    data.situacionesNoContempladas ?? "";
+
+  return row;
 }

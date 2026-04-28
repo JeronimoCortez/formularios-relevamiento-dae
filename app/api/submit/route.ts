@@ -89,7 +89,9 @@ export async function POST(req: NextRequest) {
         );
       }
 
-      row = buildRowAdultos(parsed.data as Parameters<typeof buildRowAdultos>[0]);
+      rowByHeaders = buildRowAdultos(  // 👈 rowByHeaders, no row
+        parsed.data as Parameters<typeof buildRowAdultos>[0]
+      );
     } else {
       return NextResponse.json(
         { success: false, message: `Tipo de formulario desconocido: ${tipo}` },

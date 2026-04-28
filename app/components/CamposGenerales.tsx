@@ -5,7 +5,7 @@ import { DEPARTAMENTOS_MENDOZA } from "@/types";
 type CamposGeneralesProps = {
   mostrarCorreoElectronico?: boolean;
   mostrarModalidad?: boolean;
-  tipoSedes?: "primaria" | "secundaria";
+  tipoSedes?: "primaria" | "secundaria" | "adultos";
 };
 
 export function CamposGenerales({
@@ -31,20 +31,32 @@ export function CamposGenerales({
     "54 Hogar",
     ...Array.from({ length: 4 }, (_, i) => String(i + 55)),
   ];
-  const sedesEstatalOrientada = Array.from({ length: 18 }, (_, i) => String(i + 1));
-  const sedesEstatalTecnica = Array.from({ length: 6 }, (_, i) => String(i + 1));
+  const sedesEstatalOrientada = Array.from({ length: 18 }, (_, i) =>
+    String(i + 1),
+  );
+  const sedesEstatalTecnica = Array.from({ length: 6 }, (_, i) =>
+    String(i + 1),
+  );
   const sedesPrivada = Array.from({ length: 8 }, (_, i) => String(i + 1));
+  const sedesAdultosCEBSA = Array.from({ length: 7 }, (_, i) => String(i + 1));
+  const sedesAdultosCENS = Array.from({ length: 7 }, (_, i) => String(i + 1));
 
   const sedes =
     tipoGestion === "Privada"
       ? sedesPrivada
       : tipoSedes === "secundaria"
-      ? modalidad === "Técnica"
-        ? sedesEstatalTecnica
-        : modalidad === "Orientada"
-        ? sedesEstatalOrientada
-        : []
-      : sedesEstatalPrimaria;
+        ? modalidad === "Técnica"
+          ? sedesEstatalTecnica
+          : modalidad === "Orientada"
+            ? sedesEstatalOrientada
+            : []
+        : tipoSedes === "adultos"
+          ? modalidad === "CEBSA"
+            ? sedesAdultosCEBSA
+            : modalidad === "CENS"
+              ? sedesAdultosCENS
+              : []
+          : sedesEstatalPrimaria;
 
   return (
     <section className="bg-white border border-gray-200 rounded-xl p-6 mb-6">
@@ -92,8 +104,17 @@ export function CamposGenerales({
               }`}
             >
               <option value="">— Seleccione modalidad —</option>
-              <option value="Técnica">Técnica</option>
-              <option value="Orientada">Orientada</option>
+              {tipoSedes === "adultos" ? (
+                <>
+                  <option value="CEBSA">CEBSA</option>
+                  <option value="CENS">CENS</option>
+                </>
+              ) : (
+                <>
+                  <option value="Técnica">Técnica</option>
+                  <option value="Orientada">Orientada</option>
+                </>
+              )}
             </select>
             {errors.modalidad?.message && (
               <p className="text-xs text-red-600 mt-1">
@@ -112,7 +133,9 @@ export function CamposGenerales({
             {...register("sedeSupervisión")}
             disabled={
               !tipoGestion ||
-              (tipoSedes === "secundaria" && tipoGestion === "Estatal" && !modalidad)
+              ((tipoSedes === "secundaria" || tipoSedes === "adultos") &&
+                tipoGestion === "Estatal" &&
+                !modalidad)
             }
             className={`w-full border rounded-md px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 disabled:bg-gray-100 disabled:cursor-not-allowed ${
               errors.sedeSupervisión
@@ -123,9 +146,11 @@ export function CamposGenerales({
             <option value="">
               {!tipoGestion
                 ? "Seleccione primero el tipo de gestión"
-                : tipoSedes === "secundaria" && tipoGestion === "Estatal" && !modalidad
-                ? "Seleccione primero la modalidad"
-                : "— Seleccione sede —"}
+                : (tipoSedes === "secundaria" || tipoSedes === "adultos") &&
+                    tipoGestion === "Estatal" &&
+                    !modalidad
+                  ? "Seleccione primero la modalidad"
+                  : "— Seleccione sede —"}
             </option>
             {sedes.map((s) => (
               <option key={s} value={s}>
