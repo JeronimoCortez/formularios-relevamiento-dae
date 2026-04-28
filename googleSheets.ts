@@ -30,6 +30,8 @@ type BaseFormData = Record<string, unknown> & {
   departamento: string;
   nombreEstablecimiento: string;
   escuela: string;
+  responsable1: { nombre: string; correo: string; telefono: string };
+  responsable2: { nombre: string; correo: string; telefono: string };
 };
 
 type FormDataPrimaria = BaseFormData & {
@@ -405,6 +407,13 @@ export function buildPrimariaSheetRow(data: FormDataPrimaria): Record<string, Ce
   row["Situaciones no contempladas en protocolos: Describí con tus palabras situaciones, conductas o dinámicas que generan tensión o preocupación en la comunidad educativa y que aún no sabés cómo nombrarlas o a quién derivarlas."] =
     data.situacionesNoContempladas ?? "";
 
+  row["Responsable 1: Nombre y apellido"] = data.responsable1.nombre;
+  row["Responsable 1: Correo electrónico"] = data.responsable1.correo;
+  row["Responsable 1: Teléfono de contacto"] = data.responsable1.telefono;
+  row["Responsable 2: Nombre y apellido"] = data.responsable2.nombre;
+  row["Responsable 2: Correo electrónico"] = data.responsable2.correo;
+  row["Responsable 2: Teléfono de contacto"] = data.responsable2.telefono;
+
   return row;
 }
 export function buildRowPrimaria(data: FormDataPrimaria): CellValue[] {
@@ -501,6 +510,13 @@ export function buildRowSecundaria(data: FormDataSecundaria): Record<string, Cel
   row["Situaciones no contempladas en protocolos: Describí con tus palabras situaciones, conductas o dinámicas que generan tensión o preocupación en la comunidad educativa y que aún no sabés cómo nombrarlas o a quién derivarlas."] =
     data.situacionesNoContempladas ?? "";
 
+  row["Responsable 1: Nombre y apellido"] = data.responsable1.nombre;
+  row["Responsable 1: Correo"] = data.responsable1.correo;
+  row["Responsable 1: Teléfono"] = data.responsable1.telefono;
+  row["Responsable 2: Nombre y apellido"] = data.responsable2.nombre;
+  row["Responsable 2: Correo"] = data.responsable2.correo;
+  row["Responsable 2: Teléfono"] = data.responsable2.telefono;
+
   return row;
 }
 
@@ -564,6 +580,13 @@ export function buildRowAdultos(data: FormDataAdultos): Record<string, CellValue
     data.situacionesRiesgo.otrosRiesgos;
   row["Situaciones no contempladas en protocolos: Describí con tus palabras situaciones, conductas o dinámicas que generan tensión o preocupación en la comunidad educativa y que aún no sabés cómo nombrarlas o a quién derivarlas."] =
     data.situacionesNoContempladas ?? "";
+
+  row["Responsable 1: Nombre y apellido"] = data.responsable1.nombre;
+  row["Responsable 1: Correo electrónico"] = data.responsable1.correo;
+  row["Responsable 1: Teléfono de contacto"] = data.responsable1.telefono;
+  row["Responsable 2: Nombre y apellido"] = data.responsable2.nombre;
+  row["Responsable 2: Correo electrónico"] = data.responsable2.correo;
+  row["Responsable 2: Teléfono de contacto"] = data.responsable2.telefono;
 
   return row;
 }

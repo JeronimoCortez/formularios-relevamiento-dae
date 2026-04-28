@@ -14,6 +14,7 @@ import { GradoRow } from "../components/GradoRow";
 import { SituacionesRiesgo } from "../components/SituacionesRiesgo";
 import { SubmitButton } from "../components/SubmitButton";
 import { SuccessMessage } from "../components/SuccessMessage";
+import { ResponsablesContacto } from "../components/ResponsableContacto";
 
 const CICLOS = ["1°", "2°", "3°"] as const;
 
@@ -123,6 +124,8 @@ export default function FormularioAdultos() {
                 placeholder="Describí la situación con tus palabras..."
               />
             </section>
+
+            <ResponsablesContacto/>
             {serverError && (
               <div className="mb-4 bg-red-50 border border-red-300 rounded-lg px-4 py-3 text-sm text-red-700 flex items-start gap-2">
                 <svg

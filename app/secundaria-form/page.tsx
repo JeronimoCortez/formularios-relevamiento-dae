@@ -14,6 +14,7 @@ import { GradoRow } from "../components/GradoRow";
 import { SituacionesRiesgo } from "../components/SituacionesRiesgo";
 import { SuccessMessage } from "../components/SuccessMessage";
 import { SubmitButton } from "../components/SubmitButton";
+import { ResponsablesContacto } from "../components/ResponsableContacto";
 
 const GRADOS = ["1°", "2°", "3°", "4°", "5°", "6°"] as const;
 
@@ -121,6 +122,8 @@ export default function FormularioSecundaria() {
                 placeholder="Describí la situación con tus palabras..."
               />
             </section>
+
+            <ResponsablesContacto/>
 
             {serverError && (
               <div className="mb-4 bg-red-50 border border-red-300 rounded-lg px-4 py-3 text-sm text-red-700 flex items-start gap-2">

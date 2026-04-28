@@ -81,6 +81,12 @@ const vulneracionSchema = z
     }
   });
 
+const responsableSchema = z.object({
+  nombre: z.string().min(1, "Requerido"),
+  correo: z.string().email("Correo inválido"),
+  telefono: z.string().min(1, "Requerido"),
+});
+
 // ─── Base campos generales ────────────────────────────────────────────────────
 
 const camposGeneralesSchema = z.object({
@@ -116,6 +122,8 @@ export const schemaPrimaria = camposGeneralesSchema.extend({
   situacionesNoContempladas: z.string().optional(),
   correoElectronico: correoElectronicoSchema,
   grados: makeGradosSchema(["1°", "2°", "3°", "4°", "5°", "6°", "7°"]),
+  responsable1: responsableSchema,
+  responsable2: responsableSchema,
 });
 
 export const schemaSecundaria = camposGeneralesSchema.extend({
@@ -123,13 +131,17 @@ export const schemaSecundaria = camposGeneralesSchema.extend({
   situacionesNoContempladas: z.string().optional(),
   correoElectronico: correoElectronicoSchema,  // ✅ igual que primaria
   grados: makeGradosSchema(["1°", "2°", "3°", "4°", "5°", "6°"]),
+  responsable1: responsableSchema,
+  responsable2: responsableSchema,
 });
 
 export const schemaAdultos = camposGeneralesSchema.extend({
-  modalidad: z.enum(["CEBSA", "CENS"], { message: "Debe seleccionar una modalidad" }),
+  modalidad: z.enum(["CEBJA", "CENS"], { message: "Debe seleccionar una modalidad" }),
   correoElectronico: correoElectronicoSchema,
   situacionesNoContempladas: z.string().optional(),
   ciclos: makeGradosSchema(["1°", "2°", "3°"]),
+  responsable1: responsableSchema,
+  responsable2: responsableSchema,
 });
 
 
@@ -194,6 +206,16 @@ export const defaultValuesPrimaria: FormValuesPrimaria = {
     "7°": { matricula: 0, notificadas: 0, actaSupletoria: 0, ausentes: 0 },
   },
   situacionesNoContempladas: "",
+  responsable1: {
+    nombre: "",
+    correo: "",
+    telefono: "",
+  },
+  responsable2: {
+    nombre: "",
+    correo: "",
+    telefono: "",
+  },
 };
 
 export const defaultValuesSecundaria: FormValuesSecundaria = {
@@ -225,6 +247,16 @@ export const defaultValuesSecundaria: FormValuesSecundaria = {
   situacionesNoContempladas: "",
   modalidad: undefined as unknown as "Técnica" | "Orientada",
   correoElectronico: "",
+  responsable1: {
+    nombre: "",
+    correo: "",
+    telefono: "",
+  },
+  responsable2: {
+    nombre: "",
+    correo: "",
+    telefono: "",
+  },
 };
 
 export const defaultValuesAdultos: FormValuesAdultos = {
@@ -234,7 +266,7 @@ export const defaultValuesAdultos: FormValuesAdultos = {
   nombreEstablecimiento: "",
   escuela: "",
   correoElectronico: "",
-  modalidad: undefined as unknown as "CEBSA" | "CENS",
+  modalidad: undefined as unknown as "CEBJA" | "CENS",
   situacionesRiesgo: {
     retosVirales: 0,
     amenazas: 0,
@@ -253,4 +285,14 @@ export const defaultValuesAdultos: FormValuesAdultos = {
     "3°": { matricula: 0, notificadas: 0, actaSupletoria: 0, ausentes: 0 },
   },
   situacionesNoContempladas: "",
+  responsable1: {
+    nombre: "",
+    correo: "",
+    telefono: "",
+  },
+  responsable2: {
+    nombre: "",
+    correo: "",
+    telefono: "",
+  },
 };

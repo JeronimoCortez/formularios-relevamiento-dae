@@ -38,7 +38,7 @@ export function CamposGenerales({
     String(i + 1),
   );
   const sedesPrivada = Array.from({ length: 8 }, (_, i) => String(i + 1));
-  const sedesAdultosCEBSA = Array.from({ length: 7 }, (_, i) => String(i + 1));
+  const sedesAdultosCEBJA = Array.from({ length: 7 }, (_, i) => String(i + 1));
   const sedesAdultosCENS = Array.from({ length: 7 }, (_, i) => String(i + 1));
 
   const sedes =
@@ -51,8 +51,8 @@ export function CamposGenerales({
             ? sedesEstatalOrientada
             : []
         : tipoSedes === "adultos"
-          ? modalidad === "CEBSA"
-            ? sedesAdultosCEBSA
+          ? modalidad === "CEBJA"
+            ? sedesAdultosCEBJA
             : modalidad === "CENS"
               ? sedesAdultosCENS
               : []
@@ -106,7 +106,7 @@ export function CamposGenerales({
               <option value="">— Seleccione modalidad —</option>
               {tipoSedes === "adultos" ? (
                 <>
-                  <option value="CEBSA">CEBSA</option>
+                  <option value="CEBJA">CEBJA</option>
                   <option value="CENS">CENS</option>
                 </>
               ) : (
