@@ -21,6 +21,12 @@ export function GradoRow({ prefix, label }: GradoRowProps) {
   const suma = notificadas + acta + ausentes;
   const hayError = matricula > 0 && suma !== matricula;
 
+  const limitarTresCifras = (e: React.FormEvent<HTMLInputElement>) => {
+  if (e.currentTarget.value.length > 3) {
+    e.currentTarget.value = e.currentTarget.value.slice(0, 3);
+  }
+};
+
   // Navegar el objeto de errores dinámicamente
   const parts = prefix.split(".");
   let errObj: unknown = errors;
@@ -66,6 +72,7 @@ export function GradoRow({ prefix, label }: GradoRowProps) {
                 ? "border-red-400 focus:ring-red-200 bg-red-50"
                 : "border-gray-300 focus:ring-blue-200"
             }`}
+            onInput={limitarTresCifras}
           />
         </div>
         <div>
@@ -81,6 +88,7 @@ export function GradoRow({ prefix, label }: GradoRowProps) {
                 ? "border-red-400 focus:ring-red-200 bg-red-50"
                 : "border-gray-300 focus:ring-blue-200"
             }`}
+            onInput={limitarTresCifras}
           />
         </div>
         <div>
@@ -96,6 +104,7 @@ export function GradoRow({ prefix, label }: GradoRowProps) {
                 ? "border-red-400 focus:ring-red-200 bg-red-50"
                 : "border-gray-300 focus:ring-blue-200"
             }`}
+            onInput={limitarTresCifras}
           />
         </div>
         <div>
@@ -111,6 +120,7 @@ export function GradoRow({ prefix, label }: GradoRowProps) {
                 ? "border-red-400 focus:ring-red-200 bg-red-50"
                 : "border-gray-300 focus:ring-blue-200"
             }`}
+            onInput={limitarTresCifras}
           />
         </div>
       </div>

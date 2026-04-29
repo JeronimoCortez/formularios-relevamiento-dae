@@ -201,6 +201,26 @@ export function CamposGenerales({
             type="text"
             {...register("escuela")}
             placeholder="Número sin guiones"
+            inputMode="numeric"
+            onKeyDown={(e) => {
+              const allowed = [
+                "Backspace",
+                "Delete",
+                "Tab",
+                "ArrowLeft",
+                "ArrowRight",
+                "Home",
+                "End",
+              ];
+              if (!allowed.includes(e.key) && !/^\d$/.test(e.key)) {
+                e.preventDefault();
+              }
+            }}
+            onInput={(e) => {
+              const input = e.currentTarget;
+              input.value = input.value.replace(/\D/g, "");
+            }}
+            {...register("escuela")}
             className={`w-full border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 ${
               errors.escuela
                 ? "border-red-400 focus:ring-red-200"

@@ -8,6 +8,12 @@ export function SituacionesRiesgo() {
     formState: { errors },
   } = useFormContext();
 
+  const limitarTresCifras = (e: React.FormEvent<HTMLInputElement>) => {
+    if (e.currentTarget.value.length > 3) {
+      e.currentTarget.value = e.currentTarget.value.slice(0, 3);
+    }
+  };
+
   const descripcionValue =
     useWatch({ name: "situacionesRiesgo.descripcion" }) || "";
 
@@ -87,6 +93,7 @@ export function SituacionesRiesgo() {
               </label>
               <div>
                 <input
+                  onInput={limitarTresCifras}
                   type="number"
                   min="0"
                   {...register(name)}
@@ -104,8 +111,6 @@ export function SituacionesRiesgo() {
           );
         })}
       </div>
-
-     
     </section>
   );
 }
