@@ -113,7 +113,7 @@ export default function FormularioSecundaria() {
                 dinámicas que generan tensión o preocupación en la
                 comunidad educativa, que aún no estén contempladas en los
                 protocolos existentes o que todavía no sabés bien cómo
-                nombrarlas ni a quién derivarlas? Por favor, relatar con tus palabras.
+                nombrarlas ni a quién derivarlas? Por favor, relatar con sus palabras.
               </p>
               <textarea
                 {...methods.register("situacionesNoContempladas")}

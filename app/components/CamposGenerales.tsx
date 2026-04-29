@@ -93,7 +93,7 @@ export function CamposGenerales({
         {mostrarModalidad && (
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Modalidad <span className="text-red-500">*</span>
+              {tipoSedes === "adultos" ? "Nivel" : "Modalidad"} <span className="text-red-500">*</span>
             </label>
             <select
               {...register("modalidad")}
