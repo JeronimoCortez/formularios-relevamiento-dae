@@ -407,12 +407,12 @@ export function buildPrimariaSheetRow(data: FormDataPrimaria): Record<string, Ce
   row["Situaciones no contempladas en protocolos: Describí con tus palabras situaciones, conductas o dinámicas que generan tensión o preocupación en la comunidad educativa y que aún no sabés cómo nombrarlas o a quién derivarlas."] =
     data.situacionesNoContempladas ?? "";
 
-  row["Responsable 1: Nombre y apellido"] = data.responsable1.nombre;
-  row["Responsable 1: Correo electrónico"] = data.responsable1.correo;
-  row["Responsable 1: Teléfono de contacto"] = data.responsable1.telefono;
-  row["Responsable 2: Nombre y apellido"] = data.responsable2.nombre;
-  row["Responsable 2: Correo electrónico"] = data.responsable2.correo;
-  row["Responsable 2: Teléfono de contacto"] = data.responsable2.telefono;
+  row["Persona responsable de la carga de datos ante situaciones emergentes: Nombre y apellido"] = data.responsable1.nombre;
+  row["Persona responsable de la carga de datos ante situaciones emergentes: Correo electrónico"] = data.responsable1.correo;
+  row["Persona responsable de la carga de datos ante situaciones emergentes: Teléfono de contacto"] = data.responsable1.telefono;
+  row["Persona a cargo de la comunicación institucional frente a situaciones de crisis: Nombre y apellido"] = data.responsable2.nombre;
+  row["Persona a cargo de la comunicación institucional frente a situaciones de crisis: Correo electrónico"] = data.responsable2.correo;
+  row["Persona a cargo de la comunicación institucional frente a situaciones de crisis: Teléfono de contacto"] = data.responsable2.telefono;
 
   return row;
 }
@@ -509,13 +509,12 @@ export function buildRowSecundaria(data: FormDataSecundaria): Record<string, Cel
     data.situacionesRiesgo.otrosRiesgos;
   row["Situaciones no contempladas en protocolos: Describí con tus palabras situaciones, conductas o dinámicas que generan tensión o preocupación en la comunidad educativa y que aún no sabés cómo nombrarlas o a quién derivarlas."] =
     data.situacionesNoContempladas ?? "";
-
-  row["Responsable 1: Nombre y apellido"] = data.responsable1.nombre;
-  row["Responsable 1: Correo"] = data.responsable1.correo;
-  row["Responsable 1: Teléfono"] = data.responsable1.telefono;
-  row["Responsable 2: Nombre y apellido"] = data.responsable2.nombre;
-  row["Responsable 2: Correo"] = data.responsable2.correo;
-  row["Responsable 2: Teléfono"] = data.responsable2.telefono;
+  row["Persona responsable de la carga de datos ante situaciones emergentes: Nombre y apellido"] = data.responsable1.nombre;
+  row["Persona responsable de la carga de datos ante situaciones emergentes: Correo electrónico"] = data.responsable1.correo;
+  row["Persona responsable de la carga de datos ante situaciones emergentes: Teléfono de contacto"] = data.responsable1.telefono;
+  row["Persona a cargo de la comunicación institucional frente a situaciones de crisis: Nombre y apellido"] = data.responsable2.nombre;
+  row["Persona a cargo de la comunicación institucional frente a situaciones de crisis: Correo electrónico"] = data.responsable2.correo;
+  row["Persona a cargo de la comunicación institucional frente a situaciones de crisis: Teléfono de contacto"] = data.responsable2.telefono;
 
   return row;
 }
@@ -581,12 +580,11 @@ export function buildRowAdultos(data: FormDataAdultos): Record<string, CellValue
   row["Situaciones no contempladas en protocolos: Describí con tus palabras situaciones, conductas o dinámicas que generan tensión o preocupación en la comunidad educativa y que aún no sabés cómo nombrarlas o a quién derivarlas."] =
     data.situacionesNoContempladas ?? "";
 
-  row["Responsable 1: Nombre y apellido"] = data.responsable1.nombre;
-  row["Responsable 1: Correo electrónico"] = data.responsable1.correo;
-  row["Responsable 1: Teléfono de contacto"] = data.responsable1.telefono;
-  row["Responsable 2: Nombre y apellido"] = data.responsable2.nombre;
-  row["Responsable 2: Correo electrónico"] = data.responsable2.correo;
-  row["Responsable 2: Teléfono de contacto"] = data.responsable2.telefono;
-
+  row["Persona responsable de la carga de datos ante situaciones emergentes: Nombre y apellido"] = data.responsable1.nombre;
+  row["Persona responsable de la carga de datos ante situaciones emergentes: Correo electrónico"] = data.responsable1.correo;
+  row["Persona responsable de la carga de datos ante situaciones emergentes: Teléfono de contacto"] = data.responsable1.telefono;
+  row["Persona a cargo de la comunicación institucional frente a situaciones de crisis: Nombre y apellido"] = data.responsable2.nombre;
+  row["Persona a cargo de la comunicación institucional frente a situaciones de crisis: Correo electrónico"] = data.responsable2.correo;
+  row["Persona a cargo de la comunicación institucional frente a situaciones de crisis: Teléfono de contacto"] = data.responsable2.telefono;
   return row;
 }

@@ -3,6 +3,11 @@ import { useFormContext } from "react-hook-form";
 
 type ResponsableField = "responsable1" | "responsable2";
 
+const LABELS: Record<1 | 2, string> = {
+  1: "Persona responsable de la carga de datos ante situaciones emergentes",
+  2: "Persona a cargo de la comunicación institucional frente a situaciones de crisis",
+};
+
 function ResponsableBlock({ index }: { index: 1 | 2 }) {
   const field: ResponsableField = `responsable${index}`;
   const {
@@ -15,7 +20,7 @@ function ResponsableBlock({ index }: { index: 1 | 2 }) {
   return (
     <div className="space-y-4">
       <h4 className="text-sm font-semibold text-gray-700">
-        Responsable {index}
+        {LABELS[index]}
       </h4>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -87,7 +92,7 @@ export function ResponsablesContacto() {
   return (
     <section className="bg-white border border-gray-200 rounded-xl p-6 mb-6">
       <h3 className="text-base font-semibold text-gray-800 mb-4">
-        Personas responsables de la carga de datos ante situaciones emergentes
+        Responsables de contacto
       </h3>
 
       <div className="space-y-6">
