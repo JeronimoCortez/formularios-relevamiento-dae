@@ -530,7 +530,7 @@ export function buildRowAdultos(data: FormDataAdultos): Record<string, CellValue
     "Marca temporal": getTimestamp(),
     "Dirección de correo electrónico": data.correoElectronico ?? "",
     "Gestión a la que pertenece la institución educativa": data.tipoGestion,
-    "Modalidad": data.modalidad ?? "",
+    "Nivel": data.modalidad ?? "",
     "Departamento en la que está ubicada la institución educativa": data.departamento,
     "Sección de supervisión a la que pertene la institución educativa": sedeSupervision,
     "Nombre del establecimiento": data.nombreEstablecimiento,

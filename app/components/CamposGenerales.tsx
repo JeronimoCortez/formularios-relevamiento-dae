@@ -103,14 +103,16 @@ export function CamposGenerales({
                   : "border-gray-300 focus:ring-blue-200"
               }`}
             >
-              <option value="">— Seleccione modalidad —</option>
               {tipoSedes === "adultos" ? (
                 <>
+                  <option value="">— Seleccione Nivel —</option>
+
                   <option value="CEBJA">CEBJA</option>
                   <option value="CENS">CENS</option>
                 </>
               ) : (
                 <>
+                  <option value="">— Seleccione Modalidad —</option>
                   <option value="Técnica">Técnica</option>
                   <option value="Orientada">Orientada</option>
                 </>

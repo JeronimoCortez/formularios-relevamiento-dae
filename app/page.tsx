@@ -122,7 +122,7 @@ export default function Home() {
       {/* Formularios */}
       <div className="max-w-3xl mx-auto px-4 py-12">
         <h2 className="text-center text-gray-600 text-sm font-medium uppercase tracking-wider mb-8">
-          Seleccione el nivel educativo
+          Seleccione un formulario.
         </h2>
 
         <div className="grid gap-4 md:grid-cols-3">

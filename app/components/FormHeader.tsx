@@ -22,7 +22,7 @@ export function FormHeader({ nivel }: FormHeaderProps) {
             Acuerdos de Convivencia y Seguridad Integral
           </h1>
           <p className="text-blue-200 text-sm font-semibold">
-            Formulario — Nivel {nivel}
+            Formulario — {nivel == "Jóvenes y Adultos" ? "Modalidad" : "Nivel"} {nivel}
           </p>
         </div>
       </div>
