@@ -5,7 +5,7 @@ import { DEPARTAMENTOS_MENDOZA } from "@/types";
 type CamposGeneralesProps = {
   mostrarCorreoElectronico?: boolean;
   mostrarModalidad?: boolean;
-  tipoSedes?: "primaria" | "secundaria" | "adultos";
+  tipoSedes?: "primaria" | "secundaria" | "adultos" | "educacion-especial";
 };
 
 export function CamposGenerales({
@@ -40,9 +40,14 @@ export function CamposGenerales({
   const sedesPrivada = Array.from({ length: 8 }, (_, i) => String(i + 1));
   const sedesAdultosCEBJA = Array.from({ length: 7 }, (_, i) => String(i + 1));
   const sedesAdultosCENS = Array.from({ length: 7 }, (_, i) => String(i + 1));
+  const sedesEducacionEspecial = Array.from({ length: 5 }, (_, i) =>
+    String(i + 1),
+  );
 
   const sedes =
-    tipoGestion === "Privada"
+    tipoSedes === "educacion-especial"
+      ? sedesEducacionEspecial
+      : tipoGestion === "Privada"
       ? sedesPrivada
       : tipoSedes === "secundaria"
         ? modalidad === "Técnica"
@@ -156,7 +161,9 @@ export function CamposGenerales({
             </option>
             {sedes.map((s) => (
               <option key={s} value={s}>
-                Sede {s}
+                {tipoSedes === "educacion-especial"
+                  ? `Sede ${s} - Educacion especial`
+                  : `Sede ${s}`}
               </option>
             ))}
           </select>

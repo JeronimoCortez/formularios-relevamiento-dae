@@ -2,7 +2,11 @@
 
 export type TipoGestion = "Estatal" | "Privada" ;
 
-export type TipoFormulario = "primaria" | "secundaria" | "adultos";
+export type TipoFormulario =
+  | "primaria"
+  | "secundaria"
+  | "adultos"
+  | "educacion-especial";
 
 export interface GradoData {
   matricula: number;
@@ -60,9 +64,15 @@ export interface FormDataAdultos {
   vulneracion: VulneracionDerechos;
 }
 
+export interface FormDataEducacionEspecial extends FormDataPrimaria {}
+
 export interface ApiSubmitBody {
   tipo: TipoFormulario;
-  data: FormDataPrimaria | FormDataSecundaria | FormDataAdultos;
+  data:
+    | FormDataPrimaria
+    | FormDataSecundaria
+    | FormDataAdultos
+    | FormDataEducacionEspecial;
 }
 
 export interface ApiResponse {

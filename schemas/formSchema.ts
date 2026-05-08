@@ -145,9 +145,17 @@ export const schemaAdultos = camposGeneralesSchema.extend({
 });
 
 
+export const schemaEducacionEspecial = camposGeneralesSchema.extend({
+  situacionesNoContempladas: z.string().optional(),
+  correoElectronico: correoElectronicoSchema,
+  grados: makeGradosSchema(["1\u00B0"]),
+  responsable1: responsableSchema,
+  responsable2: responsableSchema,
+});
 export type FormValuesPrimaria = z.infer<typeof schemaPrimaria>;
 export type FormValuesSecundaria = z.infer<typeof schemaSecundaria>;
 export type FormValuesAdultos = z.infer<typeof schemaAdultos>;
+export type FormValuesEducacionEspecial = z.infer<typeof schemaEducacionEspecial>;
 
 // Default values helpers
 const defaultGrado = { matricula: 0, notificadas: 0, actaSupletoria: 0, ausentes: 0 };
@@ -296,3 +304,39 @@ export const defaultValuesAdultos: FormValuesAdultos = {
     telefono: "",
   },
 };
+export const defaultValuesEducacionEspecial: FormValuesEducacionEspecial = {
+  tipoGestion: "Estatal",
+  correoElectronico: "",
+  sedeSupervisión: "",
+  departamento: DEPARTAMENTOS_MENDOZA[0],
+  nombreEstablecimiento: "",
+  escuela: "",
+  situacionesRiesgo: {
+    retosVirales: 0,
+    amenazas: 0,
+    conflictosPares: 0,
+    conflictividadDigital: 0,
+    otrosRiesgos: 0,
+  },
+  vulneracion: {
+    detectados: "no",
+    cantidadCasos: 0,
+    descripcion: "",
+  },
+  grados: {
+    "1°": { matricula: 0, notificadas: 0, actaSupletoria: 0, ausentes: 0 },
+  },
+  situacionesNoContempladas: "",
+  responsable1: {
+    nombre: "",
+    correo: "",
+    telefono: "",
+  },
+  responsable2: {
+    nombre: "",
+    correo: "",
+    telefono: "",
+  },
+};
+
+

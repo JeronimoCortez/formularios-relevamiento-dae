@@ -3,6 +3,7 @@ import {
   schemaPrimaria,
   schemaSecundaria,
   schemaAdultos,
+  schemaEducacionEspecial,
 } from "@/schemas/formSchema";
 import {
   appendRow,
@@ -10,6 +11,7 @@ import {
   buildPrimariaSheetRow,
   buildRowSecundaria,
   buildRowAdultos,
+  buildRowEducacionEspecial,
   existsRowByEmail,
 } from "@/googleSheets";
 
@@ -91,6 +93,38 @@ export async function POST(req: NextRequest) {
 
       rowByHeaders = buildRowAdultos(  // 👈 rowByHeaders, no row
         parsed.data as Parameters<typeof buildRowAdultos>[0]
+      );
+    } else if (tipo === "educacion-especial") {
+      const parsed = schemaEducacionEspecial.safeParse(data);
+      if (!parsed.success) {
+        return NextResponse.json(
+          {
+            success: false,
+            message: "Error de validacion en servidor",
+            errors: parsed.error.flatten(),
+          },
+          { status: 422 }
+        );
+      }
+
+      const duplicatedEmail = await existsRowByEmail(
+        tipo,
+        parsed.data.correoElectronico
+      );
+
+      if (duplicatedEmail) {
+        return NextResponse.json(
+          {
+            success: false,
+            message:
+              "Ya existe un registro con ese correo electronico. Verifique el email.",
+          },
+          { status: 409 }
+        );
+      }
+
+      rowByHeaders = buildRowEducacionEspecial(
+        parsed.data as Parameters<typeof buildRowEducacionEspecial>[0]
       );
     } else {
       return NextResponse.json(

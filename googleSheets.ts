@@ -60,10 +60,19 @@ type FormDataAdultos = BaseFormData & {
   situacionesNoContempladas?: string;
 };
 
+type FormDataEducacionEspecial = BaseFormData & {
+  correoElectronico: string;
+  grados: Record<string, GradoData>;
+  situacionesRiesgo: SituacionesData;
+  vulneracion: VulneracionData;
+  situacionesNoContempladas?: string;
+};
+
 const SHEET_NAMES: Record<TipoFormulario, string> = {
   primaria: "primaria",
   secundaria: "Secundaria",
   adultos: "Adultos",
+  "educacion-especial": "educacion-especial",
 };
 
 function getAuth() {
@@ -416,6 +425,53 @@ export function buildPrimariaSheetRow(data: FormDataPrimaria): Record<string, Ce
 
   return row;
 }
+export function buildRowEducacionEspecial(
+  data: FormDataEducacionEspecial
+): Record<string, CellValue> {
+  const sedeSupervision = formatSedeSupervision(
+    data.tipoGestion,
+    getSedeSupervision(data)
+  );
+
+  const row: Record<string, CellValue> = {
+    "Marca temporal": getTimestamp(),
+    "Dirección de correo electrónico": data.correoElectronico,
+    "Gestión a la que pertenece la institución educativa": data.tipoGestion,
+    "Departamento en la que está ubicada la institución educativa": data.departamento,
+    "Sección de supervisión a la que pertene la institución educativa": sedeSupervision,
+    "Nombre del establecimiento": data.nombreEstablecimiento,
+    "Número de la institución (solo número sin guión)": data.escuela,
+  };
+
+  const grado = data.grados["1\u00B0"];
+  row["Matrícula total de 1º GRADO: (Tener en cuenta todas las secciones y turnos)"] =
+    grado?.matricula ?? 0;
+  row["Familias efectivamente notificadas (Firma de Circular) 1"] =
+    grado?.notificadas ?? 0;
+  row["Familias notificadas por Acta Supletoria (Negativa de firma) 1"] =
+    grado?.actaSupletoria ?? 0;
+  row["Familias ausentes 1"] = grado?.ausentes ?? 0;
+
+  row["Retos Virales Peligrosos: Cantidad de desafíos de redes sociales que pongan en riesgo la integridad."] =
+    data.situacionesRiesgo.retosVirales;
+  row["Amenazas de Intimidación Pública: Cantidad de casos de falsa alarma o situaciones de alteración de la convivencia escolar."] =
+    data.situacionesRiesgo.amenazas;
+  row["Conflictividad en Entornos Digitales: Cantidad de casos de acoso entre pares o uso indebido de grupos de WhatsApp/redes."] =
+    data.situacionesRiesgo.conflictosPares + data.situacionesRiesgo.conflictividadDigital;
+  row["Otros Riesgos Institucionales: Cantidad de situaciones no contempladas en las anteriores que alteren la paz institucional."] =
+    data.situacionesRiesgo.otrosRiesgos;
+  row["Situaciones no contempladas en protocolos: Describí con tus palabras situaciones, conductas o dinámicas que generan tensión o preocupación en la comunidad educativa y que aún no sabés cómo nombrarlas o a quién derivarlas."] =
+    data.situacionesNoContempladas ?? "";
+
+  row["Persona responsable de la carga de datos ante situaciones emergentes: Nombre y apellido"] = data.responsable1.nombre;
+  row["Persona responsable de la carga de datos ante situaciones emergentes: Correo electrónico"] = data.responsable1.correo;
+  row["Persona responsable de la carga de datos ante situaciones emergentes: Teléfono de contacto"] = data.responsable1.telefono;
+  row["Persona a cargo de la comunicación institucional frente a situaciones de crisis: Nombre y apellido"] = data.responsable2.nombre;
+  row["Persona a cargo de la comunicación institucional frente a situaciones de crisis: Correo electrónico"] = data.responsable2.correo;
+  row["Persona a cargo de la comunicación institucional frente a situaciones de crisis: Teléfono de contacto"] = data.responsable2.telefono;
+
+  return row;
+}
 export function buildRowPrimaria(data: FormDataPrimaria): CellValue[] {
   const gradoKeys = ["1°", "2°", "3°", "4°", "5°", "6°", "7°"];
   const gradosRow = gradoKeys.flatMap((gradoKey) => gradoToRow(data.grados[gradoKey]));
@@ -588,3 +644,4 @@ export function buildRowAdultos(data: FormDataAdultos): Record<string, CellValue
   row["Persona a cargo de la comunicación institucional frente a situaciones de crisis: Teléfono de contacto"] = data.responsable2.telefono;
   return row;
 }
+
