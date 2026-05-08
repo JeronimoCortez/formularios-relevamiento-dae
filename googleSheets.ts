@@ -340,9 +340,9 @@ export function buildPrimariaSheetRow(data: FormDataPrimaria): Record<string, Ce
     {
       key: "1°",
       matricula: "Matrícula total de 1º GRADO: (Tener en cuenta todas las secciones y turnos)",
-      notificadas: "Familias efectivamente notificadas (Firma de Circular)",
-      acta: "Familias notificadas por Acta Supletoria (Negativa de firma)",
-      ausentes: "Familias ausentes",
+      notificadas: "Familias efectivamente notificadas (Firma de Circular) 1",
+      acta: "Familias notificadas por Acta Supletoria (Negativa de firma) 1",
+      ausentes: "Familias ausentes 1",
     },
     {
       key: "2°",
@@ -450,9 +450,9 @@ export function buildRowSecundaria(data: FormDataSecundaria): Record<string, Cel
     {
       key: "1°",
       matricula: "Matrícula total de 1º Año: (Tener en cuenta todas las secciones y turnos)",
-      notificadas: "Familias efectivamente notificadas (Firma de Circular)",
-      acta: "Familias notificadas por Acta Supletoria (Negativa de firma)",
-      ausentes: "Familias ausentes",
+      notificadas: "Familias efectivamente notificadas (Firma de Circular) 1",
+      acta: "Familias notificadas por Acta Supletoria (Negativa de firma) 1",
+      ausentes: "Familias ausentes 1",
     },
     {
       key: "2°",
@@ -541,9 +541,9 @@ export function buildRowAdultos(data: FormDataAdultos): Record<string, CellValue
     {
       key: "1°",
       matricula: "Matrícula total de 1º Año: (Tener en cuenta todas las secciones y turnos)",
-      notificadas: "Familias efectivamente notificadas (Firma de Circular)",
-      acta: "Familias notificadas por Acta Supletoria (Negativa de firma)",
-      ausentes: "Familias ausentes",
+      notificadas: "Familias efectivamente notificadas (Firma de Circular) 1",
+      acta: "Familias notificadas por Acta Supletoria (Negativa de firma) 1",
+      ausentes: "Familias ausentes 1",
     },
     {
       key: "2°",
