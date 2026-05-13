@@ -75,6 +75,89 @@ const SHEET_NAMES: Record<TipoFormulario, string> = {
   "educacion-especial": "educacion-especial",
 };
 
+const RETRYABLE_STATUS_CODES = new Set([429, 500, 502, 503, 504]);
+const MAX_RETRY_ATTEMPTS = 4;
+const writeQueueByFormType = new Map<TipoFormulario, Promise<void>>();
+
+function sleep(ms: number) {
+  return new Promise<void>((resolve) => {
+    setTimeout(resolve, ms);
+  });
+}
+
+function getHttpStatusFromError(error: unknown) {
+  if (typeof error !== "object" || error === null) {
+    return undefined;
+  }
+
+  const maybeError = error as {
+    code?: unknown;
+    response?: {
+      status?: unknown;
+    };
+  };
+
+  if (typeof maybeError.response?.status === "number") {
+    return maybeError.response.status;
+  }
+
+  if (typeof maybeError.code === "number") {
+    return maybeError.code;
+  }
+
+  return undefined;
+}
+
+function isRetryableError(error: unknown) {
+  const status = getHttpStatusFromError(error);
+  return typeof status === "number" && RETRYABLE_STATUS_CODES.has(status);
+}
+
+async function withRetry<T>(operation: () => Promise<T>): Promise<T> {
+  let attempt = 0;
+  let delayMs = 200;
+
+  while (true) {
+    attempt += 1;
+    try {
+      return await operation();
+    } catch (error) {
+      if (!isRetryableError(error) || attempt >= MAX_RETRY_ATTEMPTS) {
+        throw error;
+      }
+
+      await sleep(delayMs);
+      delayMs *= 2;
+    }
+  }
+}
+
+async function runQueuedWrite<T>(
+  tipo: TipoFormulario,
+  operation: () => Promise<T>
+): Promise<T> {
+  const previous = writeQueueByFormType.get(tipo) ?? Promise.resolve();
+
+  const current = previous
+    .catch(() => undefined)
+    .then(operation);
+
+  const settled = current.then(
+    () => undefined,
+    () => undefined
+  );
+
+  writeQueueByFormType.set(tipo, settled);
+
+  try {
+    return await current;
+  } finally {
+    if (writeQueueByFormType.get(tipo) === settled) {
+      writeQueueByFormType.delete(tipo);
+    }
+  }
+}
+
 function getAuth() {
   const clientEmail = process.env.GOOGLE_CLIENT_EMAIL;
   const privateKey = process.env.GOOGLE_PRIVATE_KEY?.replace(/\\n/g, "\n");
@@ -204,10 +287,12 @@ async function getSheetHeaders(sheetName: string) {
   const sheets = getSheetsClient();
   const spreadsheetId = getSpreadsheetId();
 
-  const response = await sheets.spreadsheets.values.get({
-    spreadsheetId,
-    range: `${sheetName}!1:1`,
-  });
+  const response = await withRetry(() =>
+    sheets.spreadsheets.values.get({
+      spreadsheetId,
+      range: `${sheetName}!1:1`,
+    })
+  );
 
   const headers = response.data.values?.[0]?.map((value) => String(value).trim()) ?? [];
 
@@ -278,10 +363,12 @@ export async function existsRowByEmail(
   }
 
   const emailColumn = getColumnLetter(emailHeaderIndex);
-  const response = await sheets.spreadsheets.values.get({
-    spreadsheetId,
-    range: `${sheetName}!${emailColumn}2:${emailColumn}`,
-  });
+  const response = await withRetry(() =>
+    sheets.spreadsheets.values.get({
+      spreadsheetId,
+      range: `${sheetName}!${emailColumn}2:${emailColumn}`,
+    })
+  );
 
   const values = response.data.values?.flat().map((value) => String(value)) ?? [];
 
@@ -292,18 +379,22 @@ export async function appendRow(
   tipo: TipoFormulario,
   values: CellValue[]
 ): Promise<void> {
-  const sheets = getSheetsClient();
-  const spreadsheetId = getSpreadsheetId();
-  const sheetName = SHEET_NAMES[tipo];
+  await runQueuedWrite(tipo, async () => {
+    const sheets = getSheetsClient();
+    const spreadsheetId = getSpreadsheetId();
+    const sheetName = SHEET_NAMES[tipo];
 
-  await sheets.spreadsheets.values.append({
-    spreadsheetId,
-    range: `${sheetName}!A:ZZ`,
-    insertDataOption: "INSERT_ROWS",
-    valueInputOption: "RAW",
-    requestBody: {
-      values: [values],
-    },
+    await withRetry(() =>
+      sheets.spreadsheets.values.append({
+        spreadsheetId,
+        range: `${sheetName}!A:ZZ`,
+        insertDataOption: "INSERT_ROWS",
+        valueInputOption: "RAW",
+        requestBody: {
+          values: [values],
+        },
+      })
+    );
   });
 }
 
@@ -311,21 +402,58 @@ export async function appendRowByHeaders(
   tipo: TipoFormulario,
   valuesByHeader: Record<string, CellValue>
 ): Promise<void> {
-  const sheets = getSheetsClient();
-  const spreadsheetId = getSpreadsheetId();
-  const sheetName = SHEET_NAMES[tipo];
-  const headers = await getSheetHeaders(sheetName);
+  await runQueuedWrite(tipo, async () => {
+    const sheets = getSheetsClient();
+    const spreadsheetId = getSpreadsheetId();
+    const sheetName = SHEET_NAMES[tipo];
+    const headers = await getSheetHeaders(sheetName);
 
-  const row = headers.map((header) => valuesByHeader[header] ?? "");
+    const row = headers.map((header) => valuesByHeader[header] ?? "");
 
-  await sheets.spreadsheets.values.append({
-    spreadsheetId,
-    range: `${sheetName}!A:ZZ`,
-    insertDataOption: "INSERT_ROWS",
-    valueInputOption: "RAW",
-    requestBody: {
-      values: [row],
-    },
+    await withRetry(() =>
+      sheets.spreadsheets.values.append({
+        spreadsheetId,
+        range: `${sheetName}!A:ZZ`,
+        insertDataOption: "INSERT_ROWS",
+        valueInputOption: "RAW",
+        requestBody: {
+          values: [row],
+        },
+      })
+    );
+  });
+}
+
+export async function appendRowByHeadersUniqueEmail(
+  tipo: TipoFormulario,
+  email: string,
+  valuesByHeader: Record<string, CellValue>
+): Promise<"appended" | "duplicate"> {
+  return runQueuedWrite(tipo, async () => {
+    const duplicated = await existsRowByEmail(tipo, email);
+    if (duplicated) {
+      return "duplicate";
+    }
+
+    const sheets = getSheetsClient();
+    const spreadsheetId = getSpreadsheetId();
+    const sheetName = SHEET_NAMES[tipo];
+    const headers = await getSheetHeaders(sheetName);
+    const row = headers.map((header) => valuesByHeader[header] ?? "");
+
+    await withRetry(() =>
+      sheets.spreadsheets.values.append({
+        spreadsheetId,
+        range: `${sheetName}!A:ZZ`,
+        insertDataOption: "INSERT_ROWS",
+        valueInputOption: "RAW",
+        requestBody: {
+          values: [row],
+        },
+      })
+    );
+
+    return "appended";
   });
 }
 
