@@ -137,7 +137,7 @@ export default function Home() {
               />
             </svg>
             <span className="text-yellow-200 text-sm font-medium">
-              Período de carga: 07 al 13 de mayo de 2026
+              Período de carga: 07 al 15 de mayo de 2026
             </span>
           </div>
         </div>
